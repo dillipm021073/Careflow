@@ -51,15 +51,14 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
   
-  /* CareFlow specific colors */
-  --teal-dark: hsl(177 87% 16%);
-  --teal-medium: hsl(177 59% 25%);
-  --teal-bright: hsl(177 100% 35%);
-  --healthcare-blue: hsl(221 83% 53%);
-  --success-green: hsl(142 71% 45%);
-  --warning-amber: hsl(43 96% 56%);
-  --danger-red: hsl(0 84% 60%);
-  --smart-gradient: linear-gradient(135deg, hsl(182 100% 9%) 0%, hsl(177 87% 16%) 100%);
+  /* Smart Telecom specific colors */
+  --smart-teal: hsl(178 73% 40%);
+  --smart-dark-teal: hsl(178 80% 20%);
+  --smart-bright-green: hsl(120 100% 35%);
+  --smart-orange: hsl(33 100% 50%);
+  --smart-yellow: hsl(56 100% 50%);
+  --smart-red: hsl(0 84% 60%);
+  --smart-gradient: linear-gradient(135deg, hsl(178 80% 20%) 0%, hsl(178 73% 40%) 100%);
   --card-gradient: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
 }
 
@@ -126,64 +125,56 @@
 }
 
 @layer utilities {
-  .bg-teal-dark {
-    background-color: var(--teal-dark);
+  .bg-smart-teal {
+    background-color: var(--smart-teal);
   }
   
-  .bg-teal-medium {
-    background-color: var(--teal-medium);
+  .bg-smart-dark-teal {
+    background-color: var(--smart-dark-teal);
   }
   
-  .bg-teal-bright {
-    background-color: var(--teal-bright);
+  .bg-smart-bright-green {
+    background-color: var(--smart-bright-green);
   }
   
-  .bg-healthcare-blue {
-    background-color: var(--healthcare-blue);
+  .bg-smart-orange {
+    background-color: var(--smart-orange);
   }
   
-  .bg-success-green {
-    background-color: var(--success-green);
+  .bg-smart-yellow {
+    background-color: var(--smart-yellow);
   }
   
-  .bg-warning-amber {
-    background-color: var(--warning-amber);
+  .bg-smart-red {
+    background-color: var(--smart-red);
   }
   
-  .bg-danger-red {
-    background-color: var(--danger-red);
+  .text-smart-teal {
+    color: var(--smart-teal);
   }
   
-  .text-teal-dark {
-    color: var(--teal-dark);
+  .text-smart-dark-teal {
+    color: var(--smart-dark-teal);
   }
   
-  .text-teal-medium {
-    color: var(--teal-medium);
+  .text-smart-bright-green {
+    color: var(--smart-bright-green);
   }
   
-  .text-teal-bright {
-    color: var(--teal-bright);
+  .text-smart-orange {
+    color: var(--smart-orange);
   }
   
-  .text-healthcare-blue {
-    color: var(--healthcare-blue);
+  .text-smart-yellow {
+    color: var(--smart-yellow);
   }
   
-  .text-success-green {
-    color: var(--success-green);
+  .text-smart-red {
+    color: var(--smart-red);
   }
   
-  .text-warning-amber {
-    color: var(--warning-amber);
-  }
-  
-  .text-danger-red {
-    color: var(--danger-red);
-  }
-  
-  .border-teal-bright {
-    border-color: var(--teal-bright);
+  .border-smart-teal {
+    border-color: var(--smart-teal);
   }
   
   .font-inter {

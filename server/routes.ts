@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCareFlowSchema, insertPatientSchema, insertAlertSchema, insertActivitySchema } from "@shared/schema";
+import { insertCustomerSchema, insertPlanSchema, insertPromoSchema, insertTransactionSchema, insertNotificationSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -16,129 +16,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Care flows endpoints
-  app.get("/api/care-flows", async (req, res) => {
+  // Customer endpoints
+  app.get("/api/customers", async (req, res) => {
     try {
-      const careFlows = await storage.getAllCareFlows();
-      res.json(careFlows);
+      const customers = await storage.getAllCustomers();
+      res.json(customers);
     } catch (error) {
-      console.error("Error fetching care flows:", error);
-      res.status(500).json({ message: "Failed to fetch care flows" });
+      console.error("Error fetching customers:", error);
+      res.status(500).json({ message: "Failed to fetch customers" });
     }
   });
 
-  app.get("/api/care-flows/:id", async (req, res) => {
+  app.get("/api/customers/:id", async (req, res) => {
     try {
-      const careFlow = await storage.getCareFlowById(req.params.id);
-      if (!careFlow) {
-        return res.status(404).json({ message: "Care flow not found" });
+      const customer = await storage.getCustomer(req.params.id);
+      if (!customer) {
+        return res.status(404).json({ message: "Customer not found" });
       }
-      res.json(careFlow);
+      res.json(customer);
     } catch (error) {
-      console.error("Error fetching care flow:", error);
-      res.status(500).json({ message: "Failed to fetch care flow" });
+      console.error("Error fetching customer:", error);
+      res.status(500).json({ message: "Failed to fetch customer" });
     }
   });
 
-  app.post("/api/care-flows", async (req, res) => {
+  app.post("/api/customers", async (req, res) => {
     try {
-      const validatedData = insertCareFlowSchema.parse(req.body);
-      const careFlow = await storage.createCareFlow(validatedData);
-      res.status(201).json(careFlow);
+      const validatedData = insertCustomerSchema.parse(req.body);
+      const customer = await storage.createCustomer(validatedData);
+      res.status(201).json(customer);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid input data", errors: error.errors });
       }
-      console.error("Error creating care flow:", error);
-      res.status(500).json({ message: "Failed to create care flow" });
+      console.error("Error creating customer:", error);
+      res.status(500).json({ message: "Failed to create customer" });
     }
   });
 
-  // Patients endpoints
-  app.get("/api/patients", async (req, res) => {
+  // Plans endpoints
+  app.get("/api/plans", async (req, res) => {
     try {
-      const patients = await storage.getAllPatients();
-      res.json(patients);
+      const plans = await storage.getAllPlans();
+      res.json(plans);
     } catch (error) {
-      console.error("Error fetching patients:", error);
-      res.status(500).json({ message: "Failed to fetch patients" });
+      console.error("Error fetching plans:", error);
+      res.status(500).json({ message: "Failed to fetch plans" });
     }
   });
 
-  app.get("/api/patients/:id", async (req, res) => {
+  app.get("/api/plans/active", async (req, res) => {
     try {
-      const patient = await storage.getPatientById(req.params.id);
-      if (!patient) {
-        return res.status(404).json({ message: "Patient not found" });
-      }
-      res.json(patient);
+      const plans = await storage.getActivePlans();
+      res.json(plans);
     } catch (error) {
-      console.error("Error fetching patient:", error);
-      res.status(500).json({ message: "Failed to fetch patient" });
+      console.error("Error fetching active plans:", error);
+      res.status(500).json({ message: "Failed to fetch active plans" });
     }
   });
 
-  app.post("/api/patients", async (req, res) => {
+  // Promos endpoints
+  app.get("/api/promos", async (req, res) => {
     try {
-      const validatedData = insertPatientSchema.parse(req.body);
-      const patient = await storage.createPatient(validatedData);
-      res.status(201).json(patient);
+      const promos = await storage.getActivePromos();
+      res.json(promos);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid input data", errors: error.errors });
-      }
-      console.error("Error creating patient:", error);
-      res.status(500).json({ message: "Failed to create patient" });
+      console.error("Error fetching promos:", error);
+      res.status(500).json({ message: "Failed to fetch promos" });
     }
   });
 
-  // Alerts endpoints
-  app.get("/api/alerts", async (req, res) => {
+  app.get("/api/promos/featured", async (req, res) => {
     try {
-      const alerts = await storage.getAllAlerts();
-      res.json(alerts);
+      const promos = await storage.getFeaturedPromos();
+      res.json(promos);
     } catch (error) {
-      console.error("Error fetching alerts:", error);
-      res.status(500).json({ message: "Failed to fetch alerts" });
+      console.error("Error fetching featured promos:", error);
+      res.status(500).json({ message: "Failed to fetch featured promos" });
     }
   });
 
-  app.post("/api/alerts", async (req, res) => {
+  // Customer-specific endpoints
+  app.get("/api/customers/:id/transactions", async (req, res) => {
     try {
-      const validatedData = insertAlertSchema.parse(req.body);
-      const alert = await storage.createAlert(validatedData);
-      res.status(201).json(alert);
+      const transactions = await storage.getCustomerTransactions(req.params.id);
+      res.json(transactions);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid input data", errors: error.errors });
-      }
-      console.error("Error creating alert:", error);
-      res.status(500).json({ message: "Failed to create alert" });
+      console.error("Error fetching customer transactions:", error);
+      res.status(500).json({ message: "Failed to fetch customer transactions" });
     }
   });
 
-  // Activities endpoints
-  app.get("/api/activities", async (req, res) => {
+  app.get("/api/customers/:id/notifications", async (req, res) => {
     try {
-      const activities = await storage.getRecentActivities();
-      res.json(activities);
+      const notifications = await storage.getCustomerNotifications(req.params.id);
+      res.json(notifications);
     } catch (error) {
-      console.error("Error fetching activities:", error);
-      res.status(500).json({ message: "Failed to fetch activities" });
+      console.error("Error fetching customer notifications:", error);
+      res.status(500).json({ message: "Failed to fetch customer notifications" });
     }
   });
 
-  app.post("/api/activities", async (req, res) => {
+  app.post("/api/transactions", async (req, res) => {
     try {
-      const validatedData = insertActivitySchema.parse(req.body);
-      const activity = await storage.createActivity(validatedData);
-      res.status(201).json(activity);
+      const validatedData = insertTransactionSchema.parse(req.body);
+      const transaction = await storage.createTransaction(validatedData);
+      res.status(201).json(transaction);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid input data", errors: error.errors });
       }
-      console.error("Error creating activity:", error);
-      res.status(500).json({ message: "Failed to create activity" });
+      console.error("Error creating transaction:", error);
+      res.status(500).json({ message: "Failed to create transaction" });
     }
   });
 

@@ -1,49 +1,49 @@
 import { Card } from "@/components/ui/card";
 import { 
-  ClipboardList, 
-  Users, 
-  CalendarCheck, 
-  Pill, 
-  BarChart3, 
-  AlertTriangle 
+  Zap, 
+  Gift, 
+  Smartphone, 
+  CreditCard, 
+  Monitor, 
+  CircleCheck 
 } from "lucide-react";
 
 const categories = [
   {
-    title: "Care Plans",
-    icon: ClipboardList,
-    color: "healthcare-blue",
-    testId: "category-care-plans"
+    title: "Load",
+    icon: Zap,
+    color: "smart-orange",
+    testId: "category-load"
   },
   {
-    title: "Patients",
-    icon: Users,
-    color: "success-green",
-    testId: "category-patients"
+    title: "Promos",
+    icon: Gift,
+    color: "smart-yellow",
+    testId: "category-promos"
   },
   {
-    title: "Appointments",
-    icon: CalendarCheck,
-    color: "warning-amber",
-    testId: "category-appointments"
+    title: "Phones",
+    icon: Smartphone,
+    color: "smart-teal",
+    testId: "category-phones"
   },
   {
-    title: "Medications",
-    icon: Pill,
+    title: "Plans",
+    icon: CreditCard,
+    color: "smart-bright-green",
+    testId: "category-plans"
+  },
+  {
+    title: "Devices",
+    icon: Monitor,
     color: "purple-600",
-    testId: "category-medications"
+    testId: "category-devices"
   },
   {
-    title: "Reports",
-    icon: BarChart3,
+    title: "SIMs",
+    icon: CircleCheck,
     color: "pink-600",
-    testId: "category-reports"
-  },
-  {
-    title: "Emergency",
-    icon: AlertTriangle,
-    color: "danger-red",
-    testId: "category-emergency"
+    testId: "category-sims"
   }
 ];
 
@@ -52,8 +52,8 @@ export default function CategoryNavigation() {
     <section className="mb-12">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-white text-lg font-semibold">Manage by Category</h2>
-          <p className="text-teal-200 text-sm">Quick access to care management tools</p>
+          <h2 className="text-white text-lg font-semibold">Shop by Category</h2>
+          <p className="text-green-200 text-sm">Quick access to Smart services and products</p>
         </div>
       </div>
       

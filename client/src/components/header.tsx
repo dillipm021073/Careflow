@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Heart, Search, Bell, User, Menu } from "lucide-react";
+import { Smartphone, Search, Bell, User, Menu } from "lucide-react";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,12 +11,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo and Brand */}
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-teal-bright rounded-lg flex items-center justify-center">
-              <Heart className="text-white h-5 w-5" />
+            <div className="w-8 h-8 bg-smart-teal rounded-lg flex items-center justify-center">
+              <Smartphone className="text-white h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-white text-xl font-bold">CareFlow</h1>
-              <p className="text-teal-200 text-xs">Healthcare Management</p>
+              <h1 className="text-white text-xl font-bold">Smart</h1>
+              <p className="text-green-200 text-xs">Self Care</p>
             </div>
           </div>
 
@@ -24,38 +24,45 @@ export default function Header() {
           <nav className="hidden md:flex items-center space-x-8">
             <a 
               href="#" 
-              className="text-white hover:text-teal-bright transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-dashboard"
+              className="text-white hover:text-smart-teal transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-load"
             >
-              DASHBOARD
+              LOAD
             </a>
             <a 
               href="#" 
-              className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-care-plans"
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-promos"
             >
-              CARE PLANS
+              PROMOS AND ADD-ONS
             </a>
             <a 
               href="#" 
-              className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-patients"
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-sims"
             >
-              PATIENTS
+              SIMS
             </a>
             <a 
               href="#" 
-              className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-reports"
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-phones"
             >
-              REPORTS
+              PHONES
             </a>
             <a 
               href="#" 
-              className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-settings"
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-plans"
             >
-              SETTINGS
+              PLANS
+            </a>
+            <a 
+              href="#" 
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-services"
+            >
+              SERVICES
             </a>
           </nav>
 
@@ -64,7 +71,7 @@ export default function Header() {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white hover:text-teal-bright hover:bg-white hover:bg-opacity-10"
+              className="text-white hover:text-smart-teal hover:bg-white hover:bg-opacity-10"
               data-testid="button-search"
             >
               <Search className="h-5 w-5" />
@@ -72,18 +79,18 @@ export default function Header() {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white hover:text-teal-bright hover:bg-white hover:bg-opacity-10 relative"
+              className="text-white hover:text-smart-teal hover:bg-white hover:bg-opacity-10 relative"
               data-testid="button-notifications"
             >
               <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-danger-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                3
+              <span className="absolute -top-1 -right-1 bg-smart-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                2
               </span>
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white hover:text-teal-bright hover:bg-white hover:bg-opacity-10"
+              className="text-white hover:text-smart-teal hover:bg-white hover:bg-opacity-10"
               data-testid="button-profile"
             >
               <User className="h-5 w-5" />
@@ -91,7 +98,7 @@ export default function Header() {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="md:hidden text-white hover:text-teal-bright hover:bg-white hover:bg-opacity-10"
+              className="md:hidden text-white hover:text-smart-teal hover:bg-white hover:bg-opacity-10"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="button-mobile-menu"
             >
@@ -106,38 +113,45 @@ export default function Header() {
             <nav className="flex flex-col space-y-4">
               <a 
                 href="#" 
-                className="text-white hover:text-teal-bright transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-dashboard"
+                className="text-white hover:text-smart-teal transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-load"
               >
-                DASHBOARD
+                LOAD
               </a>
               <a 
                 href="#" 
-                className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-care-plans"
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-promos"
               >
-                CARE PLANS
+                PROMOS AND ADD-ONS
               </a>
               <a 
                 href="#" 
-                className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-patients"
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-sims"
               >
-                PATIENTS
+                SIMS
               </a>
               <a 
                 href="#" 
-                className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-reports"
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-phones"
               >
-                REPORTS
+                PHONES
               </a>
               <a 
                 href="#" 
-                className="text-teal-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-settings"
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-plans"
               >
-                SETTINGS
+                PLANS
+              </a>
+              <a 
+                href="#" 
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-services"
+              >
+                SERVICES
               </a>
             </nav>
           </div>

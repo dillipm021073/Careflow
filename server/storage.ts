@@ -1,313 +1,438 @@
 import { 
-  type User, 
-  type InsertUser, 
-  type Patient, 
-  type InsertPatient,
-  type CareFlow,
-  type InsertCareFlow,
-  type Alert,
-  type InsertAlert,
-  type Activity,
-  type InsertActivity
+  type Customer, 
+  type InsertCustomer, 
+  type Plan, 
+  type InsertPlan,
+  type Subscription,
+  type InsertSubscription,
+  type Promo,
+  type InsertPromo,
+  type Transaction,
+  type InsertTransaction,
+  type Usage,
+  type InsertUsage,
+  type Notification,
+  type InsertNotification
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 interface DashboardStats {
-  totalPatients: number;
-  todayAppointments: number;
-  pendingTasks: number;
-  alerts: number;
+  totalCustomers: number;
+  activeSubscriptions: number;
+  monthlyRevenue: number;
+  dataUsage: number;
 }
 
 export interface IStorage {
-  // User methods
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Customer methods
+  getCustomer(id: string): Promise<Customer | undefined>;
+  getCustomerByMsisdn(msisdn: string): Promise<Customer | undefined>;
+  getAllCustomers(): Promise<Customer[]>;
+  createCustomer(customer: InsertCustomer): Promise<Customer>;
   
-  // Patient methods
-  getAllPatients(): Promise<Patient[]>;
-  getPatientById(id: string): Promise<Patient | undefined>;
-  createPatient(patient: InsertPatient): Promise<Patient>;
+  // Plan methods
+  getAllPlans(): Promise<Plan[]>;
+  getPlanById(id: string): Promise<Plan | undefined>;
+  getActivePlans(): Promise<Plan[]>;
+  createPlan(plan: InsertPlan): Promise<Plan>;
   
-  // Care flow methods
-  getAllCareFlows(): Promise<CareFlow[]>;
-  getCareFlowById(id: string): Promise<CareFlow | undefined>;
-  createCareFlow(careFlow: InsertCareFlow): Promise<CareFlow>;
+  // Subscription methods
+  getCustomerSubscriptions(customerId: string): Promise<Subscription[]>;
+  getSubscriptionById(id: string): Promise<Subscription | undefined>;
+  createSubscription(subscription: InsertSubscription): Promise<Subscription>;
   
-  // Alert methods
-  getAllAlerts(): Promise<Alert[]>;
-  createAlert(alert: InsertAlert): Promise<Alert>;
+  // Promo methods
+  getActivePromos(): Promise<Promo[]>;
+  getFeaturedPromos(): Promise<Promo[]>;
+  getPromoById(id: string): Promise<Promo | undefined>;
+  createPromo(promo: InsertPromo): Promise<Promo>;
   
-  // Activity methods
-  getRecentActivities(): Promise<Activity[]>;
-  createActivity(activity: InsertActivity): Promise<Activity>;
+  // Transaction methods
+  getCustomerTransactions(customerId: string): Promise<Transaction[]>;
+  createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  
+  // Usage methods
+  getCustomerUsage(customerId: string): Promise<Usage[]>;
+  createUsage(usage: InsertUsage): Promise<Usage>;
+  
+  // Notification methods
+  getCustomerNotifications(customerId: string): Promise<Notification[]>;
+  createNotification(notification: InsertNotification): Promise<Notification>;
   
   // Dashboard methods
   getDashboardStats(): Promise<DashboardStats>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-  private patients: Map<string, Patient>;
-  private careFlows: Map<string, CareFlow>;
-  private alerts: Map<string, Alert>;
-  private activities: Map<string, Activity>;
+  private customers: Map<string, Customer>;
+  private plans: Map<string, Plan>;
+  private subscriptions: Map<string, Subscription>;
+  private promos: Map<string, Promo>;
+  private transactions: Map<string, Transaction>;
+  private usage: Map<string, Usage>;
+  private notifications: Map<string, Notification>;
 
   constructor() {
-    this.users = new Map();
-    this.patients = new Map();
-    this.careFlows = new Map();
-    this.alerts = new Map();
-    this.activities = new Map();
+    this.customers = new Map();
+    this.plans = new Map();
+    this.subscriptions = new Map();
+    this.promos = new Map();
+    this.transactions = new Map();
+    this.usage = new Map();
+    this.notifications = new Map();
     
     // Initialize with some sample data
     this.initializeSampleData();
   }
 
   private initializeSampleData() {
-    // Sample patients
-    const samplePatients: Patient[] = [
+    // Sample customers
+    const sampleCustomers: Customer[] = [
       {
-        id: "patient-1",
-        firstName: "John",
-        lastName: "Smith",
-        dateOfBirth: "1965-05-15",
-        gender: "Male",
-        phoneNumber: "(555) 123-4567",
-        email: "john.smith@email.com",
-        address: "123 Main St, City, State 12345",
-        emergencyContact: "Jane Smith - (555) 987-6543",
-        medicalHistory: "Previous heart surgery in 2022",
-        allergies: "Penicillin",
+        id: "customer-1",
+        msisdn: "09171234567",
+        firstName: "Juan",
+        lastName: "Dela Cruz",
+        email: "juan.delacruz@email.com",
+        dateOfBirth: "1990-05-15",
+        address: "123 Rizal Street, Makati City, Metro Manila",
+        customerType: "prepaid",
+        accountStatus: "active",
+        registrationDate: new Date("2023-01-15T00:00:00Z"),
+        createdAt: new Date("2023-01-15T00:00:00Z")
+      },
+      {
+        id: "customer-2",
+        msisdn: "09289876543",
+        firstName: "Maria",
+        lastName: "Santos",
+        email: "maria.santos@email.com",
+        dateOfBirth: "1985-09-22",
+        address: "456 EDSA, Quezon City, Metro Manila",
+        customerType: "postpaid",
+        accountStatus: "active",
+        registrationDate: new Date("2023-02-01T00:00:00Z"),
+        createdAt: new Date("2023-02-01T00:00:00Z")
+      }
+    ];
+
+    sampleCustomers.forEach(customer => this.customers.set(customer.id, customer));
+
+    // Sample plans
+    const samplePlans: Plan[] = [
+      {
+        id: "plan-1",
+        name: "Smart Prepaid 599",
+        type: "prepaid",
+        price: "599.00",
+        dataAllowance: 12288, // 12GB
+        voiceMinutes: 0, // Unlimited
+        smsCount: 0, // Unlimited
+        validityDays: 30,
+        description: "12GB data + unlimited calls & texts to all networks",
+        isActive: true,
+        createdAt: new Date("2023-01-01T00:00:00Z")
+      },
+      {
+        id: "plan-2",
+        name: "Smart Postpaid 1899",
+        type: "postpaid",
+        price: "1899.00",
+        dataAllowance: 25600, // 25GB
+        voiceMinutes: 0, // Unlimited
+        smsCount: 0, // Unlimited
+        validityDays: 30,
+        description: "25GB data + unlimited calls & texts + Netflix access",
+        isActive: true,
+        createdAt: new Date("2023-01-01T00:00:00Z")
+      }
+    ];
+
+    samplePlans.forEach(plan => this.plans.set(plan.id, plan));
+
+    // Sample promos
+    const samplePromos: Promo[] = [
+      {
+        id: "promo-1",
+        name: "GIGA50",
+        description: "2GB data valid for 3 days",
+        type: "data",
+        price: "50.00",
+        dataAmount: 2048, // 2GB
+        voiceMinutes: null,
+        smsCount: null,
+        validityHours: 72,
+        keyword: "GIGA50",
+        isActive: true,
+        category: "featured",
+        createdAt: new Date("2024-01-01T00:00:00Z")
+      },
+      {
+        id: "promo-2",
+        name: "ALLNET20",
+        description: "Unlimited calls and texts to all networks for 1 day",
+        type: "combo",
+        price: "20.00",
+        dataAmount: null,
+        voiceMinutes: 0, // Unlimited
+        smsCount: 0, // Unlimited
+        validityHours: 24,
+        keyword: "ALLNET20",
+        isActive: true,
+        category: "regular",
+        createdAt: new Date("2024-01-01T00:00:00Z")
+      }
+    ];
+
+    samplePromos.forEach(promo => this.promos.set(promo.id, promo));
+
+    // Sample subscriptions
+    const sampleSubscriptions: Subscription[] = [
+      {
+        id: "sub-1",
+        customerId: "customer-1",
+        planId: "plan-1",
+        status: "active",
+        activationDate: new Date("2024-01-15T00:00:00Z"),
+        expiryDate: new Date("2024-02-14T00:00:00Z"),
+        autoRenewal: true,
         createdAt: new Date("2024-01-15T00:00:00Z")
       },
       {
-        id: "patient-2",
-        firstName: "Sarah",
-        lastName: "Davis",
-        dateOfBirth: "1978-09-22",
-        gender: "Female",
-        phoneNumber: "(555) 234-5678",
-        email: "sarah.davis@email.com",
-        address: "456 Oak Ave, City, State 12345",
-        emergencyContact: "Tom Davis - (555) 876-5432",
-        medicalHistory: "Type 2 Diabetes diagnosed 2020",
-        allergies: "None known",
-        createdAt: new Date("2024-02-01T00:00:00Z")
+        id: "sub-2",
+        customerId: "customer-2",
+        planId: "plan-2",
+        status: "active",
+        activationDate: new Date("2023-12-01T00:00:00Z"),
+        expiryDate: null,
+        autoRenewal: true,
+        createdAt: new Date("2023-12-01T00:00:00Z")
       }
     ];
 
-    samplePatients.forEach(patient => this.patients.set(patient.id, patient));
+    sampleSubscriptions.forEach(subscription => this.subscriptions.set(subscription.id, subscription));
 
-    // Sample care flows
-    const sampleCareFlows: CareFlow[] = [
+    // Sample transactions
+    const sampleTransactions: Transaction[] = [
       {
-        id: "flow-1",
-        patientId: "patient-1",
-        title: "Post-Surgical Recovery Flow",
-        description: "Comprehensive cardiac rehabilitation program",
-        category: "cardiac",
-        status: "active",
-        priority: "high",
-        progress: 78,
-        startDate: new Date("2024-03-15T00:00:00Z"),
-        endDate: null,
-        assignedTo: "user-1",
-        stages: [
-          { id: "stage-1", title: "Pre-Surgery Assessment", status: "completed" },
-          { id: "stage-2", title: "Recovery Phase", status: "in-progress" },
-          { id: "stage-3", title: "Rehabilitation", status: "pending" }
-        ],
-        createdAt: new Date("2024-03-15T00:00:00Z")
+        id: "txn-1",
+        customerId: "customer-1",
+        type: "load_purchase",
+        amount: "100.00",
+        status: "completed",
+        description: "Load purchase via GCash",
+        referenceNumber: "GCH20240115001",
+        paymentMethod: "gcash",
+        createdAt: new Date("2024-01-15T00:00:00Z")
       },
       {
-        id: "flow-2",
-        patientId: "patient-2",
-        title: "Type 2 Diabetes Management",
-        description: "Complete diabetes care with glucose monitoring",
-        category: "diabetes",
-        status: "active",
-        priority: "medium",
-        progress: 92,
-        startDate: new Date("2024-02-01T00:00:00Z"),
-        endDate: null,
-        assignedTo: "user-2",
-        stages: [
-          { id: "stage-1", title: "Initial Assessment", status: "completed" },
-          { id: "stage-2", title: "Medication Management", status: "in-progress" },
-          { id: "stage-3", title: "Lifestyle Counseling", status: "in-progress" }
-        ],
-        createdAt: new Date("2024-02-01T00:00:00Z")
+        id: "txn-2",
+        customerId: "customer-2",
+        type: "bill_payment",
+        amount: "1899.00",
+        status: "completed",
+        description: "Monthly postpaid bill payment",
+        referenceNumber: "BP20240101001",
+        paymentMethod: "credit_card",
+        createdAt: new Date("2024-01-01T00:00:00Z")
       }
     ];
 
-    sampleCareFlows.forEach(flow => this.careFlows.set(flow.id, flow));
+    sampleTransactions.forEach(transaction => this.transactions.set(transaction.id, transaction));
 
-    // Sample alerts
-    const sampleAlerts: Alert[] = [
+    // Sample notifications
+    const sampleNotifications: Notification[] = [
       {
-        id: "alert-1",
-        patientId: "patient-1",
-        careFlowId: "flow-1",
-        type: "critical",
-        title: "High Blood Pressure Alert",
-        message: "Patient Emma Wilson - BP: 180/110 mmHg",
+        id: "notif-1",
+        customerId: "customer-1",
+        type: "usage_alert",
+        title: "Data Usage Alert",
+        message: "You've used 80% of your data allowance. Buy load to continue browsing.",
+        isRead: false,
+        priority: "normal",
+        createdAt: new Date()
+      },
+      {
+        id: "notif-2",
+        customerId: "customer-2",
+        type: "payment_due",
+        title: "Bill Payment Reminder",
+        message: "Your monthly bill of PHP 1,899 is due tomorrow. Pay now to avoid service interruption.",
         isRead: false,
         priority: "high",
         createdAt: new Date()
-      },
-      {
-        id: "alert-2",
-        patientId: "patient-2",
-        careFlowId: "flow-2",
-        type: "warning",
-        title: "Medication Due",
-        message: "Patient Robert Brown - Insulin due 2 hours ago",
-        isRead: false,
-        priority: "medium",
-        createdAt: new Date()
       }
     ];
 
-    sampleAlerts.forEach(alert => this.alerts.set(alert.id, alert));
-
-    // Sample activities
-    const sampleActivities: Activity[] = [
-      {
-        id: "activity-1",
-        patientId: "patient-1",
-        careFlowId: "flow-1",
-        userId: "user-1",
-        type: "medication_given",
-        title: "Medication administered to John Smith",
-        description: "Cardiac Care Flow • 2 minutes ago",
-        metadata: {},
-        createdAt: new Date()
-      },
-      {
-        id: "activity-2",
-        patientId: "patient-2",
-        careFlowId: "flow-2",
-        userId: "user-2",
-        type: "appointment_scheduled",
-        title: "Follow-up appointment scheduled for Sarah Davis",
-        description: "Diabetes Management • 15 minutes ago",
-        metadata: {},
-        createdAt: new Date()
-      }
-    ];
-
-    sampleActivities.forEach(activity => this.activities.set(activity.id, activity));
+    sampleNotifications.forEach(notification => this.notifications.set(notification.id, notification));
   }
 
-  // User methods
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  // Customer methods
+  async getCustomer(id: string): Promise<Customer | undefined> {
+    return this.customers.get(id);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+  async getCustomerByMsisdn(msisdn: string): Promise<Customer | undefined> {
+    return Array.from(this.customers.values()).find(
+      (customer) => customer.msisdn === msisdn,
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async getAllCustomers(): Promise<Customer[]> {
+    return Array.from(this.customers.values());
+  }
+
+  async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
     const id = randomUUID();
-    const user: User = { 
-      ...insertUser, 
+    const customer: Customer = { 
+      ...insertCustomer,
+      dateOfBirth: insertCustomer.dateOfBirth ?? null,
+      address: insertCustomer.address ?? null,
+      id,
+      registrationDate: new Date(),
+      createdAt: new Date()
+    };
+    this.customers.set(id, customer);
+    return customer;
+  }
+
+  // Plan methods
+  async getAllPlans(): Promise<Plan[]> {
+    return Array.from(this.plans.values());
+  }
+
+  async getPlanById(id: string): Promise<Plan | undefined> {
+    return this.plans.get(id);
+  }
+
+  async getActivePlans(): Promise<Plan[]> {
+    return Array.from(this.plans.values()).filter(plan => plan.isActive);
+  }
+
+  async createPlan(insertPlan: InsertPlan): Promise<Plan> {
+    const id = randomUUID();
+    const plan: Plan = { 
+      ...insertPlan, 
       id,
       createdAt: new Date()
     };
-    this.users.set(id, user);
-    return user;
+    this.plans.set(id, plan);
+    return plan;
   }
 
-  // Patient methods
-  async getAllPatients(): Promise<Patient[]> {
-    return Array.from(this.patients.values());
+  // Subscription methods
+  async getCustomerSubscriptions(customerId: string): Promise<Subscription[]> {
+    return Array.from(this.subscriptions.values()).filter(
+      subscription => subscription.customerId === customerId
+    );
   }
 
-  async getPatientById(id: string): Promise<Patient | undefined> {
-    return this.patients.get(id);
+  async getSubscriptionById(id: string): Promise<Subscription | undefined> {
+    return this.subscriptions.get(id);
   }
 
-  async createPatient(insertPatient: InsertPatient): Promise<Patient> {
+  async createSubscription(insertSubscription: InsertSubscription): Promise<Subscription> {
     const id = randomUUID();
-    const patient: Patient = { 
-      ...insertPatient, 
+    const subscription: Subscription = { 
+      ...insertSubscription, 
       id,
       createdAt: new Date()
     };
-    this.patients.set(id, patient);
-    return patient;
+    this.subscriptions.set(id, subscription);
+    return subscription;
   }
 
-  // Care flow methods
-  async getAllCareFlows(): Promise<CareFlow[]> {
-    return Array.from(this.careFlows.values());
+  // Promo methods
+  async getActivePromos(): Promise<Promo[]> {
+    return Array.from(this.promos.values()).filter(promo => promo.isActive);
   }
 
-  async getCareFlowById(id: string): Promise<CareFlow | undefined> {
-    return this.careFlows.get(id);
+  async getFeaturedPromos(): Promise<Promo[]> {
+    return Array.from(this.promos.values()).filter(promo => promo.isActive && promo.category === "featured");
   }
 
-  async createCareFlow(insertCareFlow: InsertCareFlow): Promise<CareFlow> {
+  async getPromoById(id: string): Promise<Promo | undefined> {
+    return this.promos.get(id);
+  }
+
+  async createPromo(insertPromo: InsertPromo): Promise<Promo> {
     const id = randomUUID();
-    const careFlow: CareFlow = { 
-      ...insertCareFlow, 
+    const promo: Promo = { 
+      ...insertPromo, 
       id,
       createdAt: new Date()
     };
-    this.careFlows.set(id, careFlow);
-    return careFlow;
+    this.promos.set(id, promo);
+    return promo;
   }
 
-  // Alert methods
-  async getAllAlerts(): Promise<Alert[]> {
-    return Array.from(this.alerts.values()).filter(alert => !alert.isRead);
+  // Transaction methods
+  async getCustomerTransactions(customerId: string): Promise<Transaction[]> {
+    return Array.from(this.transactions.values())
+      .filter(transaction => transaction.customerId === customerId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
-  async createAlert(insertAlert: InsertAlert): Promise<Alert> {
+  async createTransaction(insertTransaction: InsertTransaction): Promise<Transaction> {
     const id = randomUUID();
-    const alert: Alert = { 
-      ...insertAlert, 
+    const transaction: Transaction = { 
+      ...insertTransaction, 
       id,
       createdAt: new Date()
     };
-    this.alerts.set(id, alert);
-    return alert;
+    this.transactions.set(id, transaction);
+    return transaction;
   }
 
-  // Activity methods
-  async getRecentActivities(): Promise<Activity[]> {
-    const activities = Array.from(this.activities.values());
-    return activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 10);
+  // Usage methods
+  async getCustomerUsage(customerId: string): Promise<Usage[]> {
+    return Array.from(this.usage.values())
+      .filter(usage => usage.customerId === customerId)
+      .sort((a, b) => b.usageDate.getTime() - a.usageDate.getTime());
   }
 
-  async createActivity(insertActivity: InsertActivity): Promise<Activity> {
+  async createUsage(insertUsage: InsertUsage): Promise<Usage> {
     const id = randomUUID();
-    const activity: Activity = { 
-      ...insertActivity, 
+    const usage: Usage = { 
+      ...insertUsage, 
       id,
       createdAt: new Date()
     };
-    this.activities.set(id, activity);
-    return activity;
+    this.usage.set(id, usage);
+    return usage;
+  }
+
+  // Notification methods
+  async getCustomerNotifications(customerId: string): Promise<Notification[]> {
+    return Array.from(this.notifications.values())
+      .filter(notification => notification.customerId === customerId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async createNotification(insertNotification: InsertNotification): Promise<Notification> {
+    const id = randomUUID();
+    const notification: Notification = { 
+      ...insertNotification, 
+      id,
+      createdAt: new Date()
+    };
+    this.notifications.set(id, notification);
+    return notification;
   }
 
   // Dashboard methods
   async getDashboardStats(): Promise<DashboardStats> {
-    const totalPatients = this.patients.size;
-    const todayAppointments = 18; // This would be calculated from real appointment data
-    const pendingTasks = 5; // This would be calculated from real task data
-    const alerts = Array.from(this.alerts.values()).filter(alert => !alert.isRead).length;
+    const totalCustomers = this.customers.size;
+    const activeSubscriptions = Array.from(this.subscriptions.values())
+      .filter(sub => sub.status === "active").length;
+    const monthlyRevenue = 125000; // This would be calculated from real transaction data
+    const dataUsage = 78; // This would be calculated as percentage
 
     return {
-      totalPatients,
-      todayAppointments,
-      pendingTasks,
-      alerts
+      totalCustomers,
+      activeSubscriptions,
+      monthlyRevenue,
+      dataUsage
     };
   }
 }
