@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Search, Bell, User, Menu } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,48 +23,27 @@ export default function Header() {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <a 
+            <Link 
               href="/load" 
               className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-load"
             >
               LOAD
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/promos" 
               className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-promos"
             >
               PROMOS
-            </a>
-            <a 
-              href="/plans" 
-              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-plans"
-            >
-              PLANS
-            </a>
-            <a 
-              href="/phones" 
-              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-phones"
-            >
-              PHONES
-            </a>
-            <a 
-              href="/services" 
-              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-services"
-            >
-              SERVICES
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/account" 
               className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-account"
             >
               MY ACCOUNT
-            </a>
+            </Link>
           </nav>
 
           {/* User Actions */}
@@ -111,48 +91,27 @@ export default function Header() {
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-white border-opacity-10">
             <nav className="flex flex-col space-y-4">
-              <a 
+              <Link 
                 href="/load" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-load"
               >
                 LOAD
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/promos" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-promos"
               >
                 PROMOS
-              </a>
-              <a 
-                href="/plans" 
-                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-plans"
-              >
-                PLANS
-              </a>
-              <a 
-                href="/phones" 
-                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-phones"
-              >
-                PHONES
-              </a>
-              <a 
-                href="/services" 
-                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-services"
-              >
-                SERVICES
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/account" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-account"
               >
                 MY ACCOUNT
-              </a>
+              </Link>
             </nav>
           </div>
         )}
