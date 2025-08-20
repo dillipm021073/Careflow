@@ -179,7 +179,7 @@ export default function SelfCareDashboard() {
                   <div className="w-12 h-12 mx-auto mb-3 bg-purple-600 bg-opacity-10 rounded-xl flex items-center justify-center">
                     <CreditCard className="w-6 h-6 text-purple-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 text-sm">Plans</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm">My Account</h3>
                 </div>
               </Link>
               <div className="group cursor-pointer">
