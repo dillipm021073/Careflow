@@ -87,9 +87,9 @@ export default function LoadPage() {
 
   return (
     <div 
-      className="min-h-screen text-white bg-smart-dark-teal"
+      className="min-h-screen text-white"
       style={{
-        background: `linear-gradient(135deg, hsl(178 80% 20%) 0%, hsl(178 73% 40%) 50%, hsl(178 80% 20%) 100%)`
+        background: `linear-gradient(135deg, hsl(178 70% 25%) 0%, hsl(178 60% 35%) 30%, hsl(120 100% 35%) 70%, hsl(120 100% 45%) 100%)`
       }}
     >
       <Header />

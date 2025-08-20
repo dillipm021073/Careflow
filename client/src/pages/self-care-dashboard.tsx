@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,9 @@ import {
   Phone,
   Timer,
   DollarSign,
-  TrendingUp
+  TrendingUp,
+  MessageSquare,
+  Settings
 } from "lucide-react";
 import Header from "@/components/header";
 
@@ -87,12 +90,118 @@ export default function SelfCareDashboard() {
 
   return (
     <div 
-      className="min-h-screen text-white bg-smart-dark-teal"
+      className="min-h-screen text-white"
       style={{
-        background: `linear-gradient(135deg, hsl(178 80% 20%) 0%, hsl(178 73% 40%) 50%, hsl(178 80% 20%) 100%)`
+        background: `linear-gradient(135deg, hsl(178 70% 25%) 0%, hsl(178 60% 35%) 30%, hsl(120 100% 35%) 70%, hsl(120 100% 45%) 100%)`
       }}
     >
       <Header />
+      
+      {/* Hero Banner Section - matching Smart website style */}
+      <section className="relative overflow-hidden py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative bg-gradient-to-r from-smart-teal via-smart-teal to-smart-bright-green rounded-3xl p-8 md:p-12 overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center justify-between relative z-10">
+              <div className="text-white mb-8 md:mb-0 flex-1">
+                <h1 className="text-3xl md:text-5xl font-bold mb-4">
+                  NEW LOADS, SAME BIG ENERGY!
+                </h1>
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <div className="bg-black bg-opacity-20 rounded-2xl px-6 py-4">
+                    <div className="text-xl md:text-2xl font-bold">BIG DATA P99</div>
+                    <div className="text-sm opacity-90">1.5 GB + 1 GB DAILY</div>
+                    <div className="text-sm opacity-90">Valid for 3 Days</div>
+                  </div>
+                  <div className="bg-black bg-opacity-20 rounded-2xl px-6 py-4">
+                    <div className="text-xl md:text-2xl font-bold">BIG DATA P499</div>
+                    <div className="text-sm opacity-90">12 GB + 4 GB DAILY</div>
+                    <div className="text-sm opacity-90">Valid for 15 Days</div>
+                  </div>
+                </div>
+                <Button 
+                  className="bg-white text-smart-teal hover:bg-gray-100 font-bold px-8 py-3 rounded-xl text-lg"
+                  onClick={() => window.location.href = '/load'}
+                  data-testid="hero-load-now"
+                >
+                  LOAD NOW
+                </Button>
+              </div>
+              <div className="flex-shrink-0 ml-8">
+                <div className="w-48 md:w-64 h-32 md:h-48 bg-white bg-opacity-10 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                  <div className="text-center">
+                    <Smartphone className="w-12 md:w-16 h-12 md:h-16 text-white mx-auto mb-2" />
+                    <p className="text-white text-sm opacity-80">Smart Prepaid</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-smart-bright-green bg-opacity-20 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full translate-y-12 -translate-x-12"></div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Shop by Category Section */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Shop by Category</h2>
+          </div>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl">
+              <Link href="/load" className="group">
+                <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-teal bg-opacity-10 rounded-xl flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-smart-teal" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Load</h3>
+                </div>
+              </Link>
+              <Link href="/promos" className="group">
+                <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-bright-green bg-opacity-10 rounded-xl flex items-center justify-center">
+                    <Gift className="w-6 h-6 text-smart-bright-green" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Promos</h3>
+                </div>
+              </Link>
+              <div className="group cursor-pointer">
+                <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-orange bg-opacity-10 rounded-xl flex items-center justify-center">
+                    <Smartphone className="w-6 h-6 text-smart-orange" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Phones</h3>
+                </div>
+              </div>
+              <Link href="/account" className="group">
+                <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-purple-600 bg-opacity-10 rounded-xl flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Plans</h3>
+                </div>
+              </Link>
+              <div className="group cursor-pointer">
+                <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-yellow bg-opacity-10 rounded-xl flex items-center justify-center">
+                    <Settings className="w-6 h-6 text-smart-yellow" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Devices</h3>
+                </div>
+              </div>
+              <div className="group cursor-pointer">
+                <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-red bg-opacity-10 rounded-xl flex items-center justify-center">
+                    <MessageSquare className="w-6 h-6 text-smart-red" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">SIMs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
