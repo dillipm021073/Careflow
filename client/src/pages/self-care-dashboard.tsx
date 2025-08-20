@@ -119,7 +119,7 @@ export default function SelfCareDashboard() {
                   </div>
                 </div>
                 <Button 
-                  className="bg-white text-smart-teal hover:bg-gray-100 font-bold px-8 py-3 rounded-xl text-lg"
+                  className="bg-white text-black hover:bg-gray-100 font-bold px-8 py-3 rounded-xl text-lg border-2 border-white"
                   onClick={() => window.location.href = '/load'}
                   data-testid="hero-load-now"
                 >

@@ -133,7 +133,7 @@ export default function PromosPage() {
   });
 
   const subscribePromoMutation = useMutation({
-    mutationFn: (data: any) => apiRequest.post("/api/transactions", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/transactions", data),
     onSuccess: (_, variables) => {
       const promo = allPromos.find(p => p.id === variables.promoId);
       toast({
@@ -311,7 +311,7 @@ export default function PromosPage() {
                 <Button
                   onClick={() => handleSubscribe(promo)}
                   disabled={subscribePromoMutation.isPending}
-                  className="w-full bg-smart-teal hover:bg-smart-dark-teal text-white"
+                  className="w-full smart-button disabled:opacity-50"
                   data-testid={`button-subscribe-${promo.id}`}
                 >
                   {subscribePromoMutation.isPending ? (

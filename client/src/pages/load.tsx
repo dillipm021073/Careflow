@@ -53,7 +53,7 @@ export default function LoadPage() {
   });
 
   const purchaseLoadMutation = useMutation({
-    mutationFn: (data: any) => apiRequest.post("/api/transactions", data),
+    mutationFn: (data: any) => apiRequest("POST", "/api/transactions", data),
     onSuccess: () => {
       toast({
         title: "Load Purchase Successful!",
@@ -246,7 +246,7 @@ export default function LoadPage() {
             <Button
               onClick={handlePurchase}
               disabled={purchaseLoadMutation.isPending}
-              className="bg-smart-teal hover:bg-smart-dark-teal text-white px-12 py-3 text-lg font-semibold"
+              className="smart-button px-12 py-3 text-lg font-semibold disabled:opacity-50"
               data-testid="button-purchase-load"
             >
               {purchaseLoadMutation.isPending ? (

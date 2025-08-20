@@ -243,6 +243,7 @@ export default function PostpaidAccount() {
                     size="sm"
                     onClick={copyBillingToContact}
                     data-testid="copy-contact-address"
+                    className="bg-white text-black border-gray-300 hover:bg-gray-50"
                   >
                     Same as Contact
                   </Button>
@@ -251,6 +252,7 @@ export default function PostpaidAccount() {
                     size="sm"
                     onClick={() => setEditingBillingAddress(!editingBillingAddress)}
                     data-testid="edit-billing-address"
+                    className="bg-white text-black border-gray-300 hover:bg-gray-50"
                   >
                     {editingBillingAddress ? 'Cancel' : 'Edit'}
                   </Button>
@@ -317,11 +319,12 @@ export default function PostpaidAccount() {
                     <Button 
                       variant="outline"
                       onClick={() => setEditingBillingAddress(false)}
+                      className="bg-white text-black border-gray-300 hover:bg-gray-50"
                     >
                       Cancel
                     </Button>
                     <Button 
-                      className="bg-smart-teal hover:bg-smart-teal/90"
+                      className="bg-smart-teal hover:bg-smart-teal/90 text-white"
                       onClick={() => setEditingBillingAddress(false)}
                       data-testid="save-billing-address"
                     >
