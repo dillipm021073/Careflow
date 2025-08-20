@@ -32,6 +32,26 @@ interface PostpaidAccount {
   loyaltyPoints: number;
 }
 
+interface CustomerProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  primaryPhone: string;
+  alternatePhone: string;
+  contactAddress: {
+    street: string;
+    city: string;
+    province: string;
+    postalCode: string;
+  };
+  billingAddress: {
+    street: string;
+    city: string;
+    province: string;
+    postalCode: string;
+  };
+}
+
 interface Bill {
   id: string;
   billDate: string;
@@ -50,6 +70,7 @@ interface Usage {
 
 export default function PostpaidAccount() {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [editingBillingAddress, setEditingBillingAddress] = useState(false);
 
   // Mock postpaid account data
   const accountData: PostpaidAccount = {
@@ -64,6 +85,27 @@ export default function PostpaidAccount() {
     accountStatus: "Active",
     loyaltyPoints: 2450
   };
+
+  // Mock customer profile data
+  const [customerProfile, setCustomerProfile] = useState<CustomerProfile>({
+    firstName: "Juan",
+    lastName: "Dela Cruz",
+    email: "juan.delacruz@email.com",
+    primaryPhone: "09171234567",
+    alternatePhone: "09281234567",
+    contactAddress: {
+      street: "123 Rizal Street, Barangay San Antonio",
+      city: "Makati City",
+      province: "Metro Manila",
+      postalCode: "1203"
+    },
+    billingAddress: {
+      street: "456 Business District Avenue, Barangay Poblacion",
+      city: "Makati City", 
+      province: "Metro Manila",
+      postalCode: "1226"
+    }
+  });
 
   // Mock bill data for last 6 months
   const billHistory: Bill[] = [
@@ -91,6 +133,13 @@ export default function PostpaidAccount() {
     { id: "payments", title: "My Payments", icon: CreditCard, description: "Payment methods and history" },
     { id: "loyalty", title: "My Loyalty Points", icon: Gift, description: "Rewards and loyalty program" }
   ];
+
+  const copyBillingToContact = () => {
+    setCustomerProfile(prev => ({
+      ...prev,
+      billingAddress: { ...prev.contactAddress }
+    }));
+  };
 
   const renderSectionContent = () => {
     switch (selectedSection) {
@@ -131,12 +180,163 @@ export default function PostpaidAccount() {
                 <div className="space-y-2">
                   <p className="text-lg font-bold text-smart-orange">{accountData.msisdn}</p>
                   <p className="text-gray-600">Account: {accountData.accountNumber}</p>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    {accountData.accountStatus}
-                  </Badge>
+                  <div className="mt-2">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      {accountData.accountStatus}
+                    </Badge>
+                  </div>
                 </div>
               </Card>
             </div>
+          </div>
+        );
+
+      case "profile":
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">My Profile</h3>
+            
+            {/* Personal Information - Read Only */}
+            <Card className="p-6">
+              <h4 className="font-semibold text-gray-900 mb-4">Personal Information</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                  <p className="text-gray-900 bg-gray-50 p-2 rounded">{customerProfile.firstName}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                  <p className="text-gray-900 bg-gray-50 p-2 rounded">{customerProfile.lastName}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                  <p className="text-gray-900 bg-gray-50 p-2 rounded">{customerProfile.email}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Primary Phone</label>
+                  <p className="text-gray-900 bg-gray-50 p-2 rounded">{customerProfile.primaryPhone}</p>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Alternate Phone</label>
+                  <p className="text-gray-900 bg-gray-50 p-2 rounded">{customerProfile.alternatePhone}</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Contact Address - Read Only */}
+            <Card className="p-6">
+              <h4 className="font-semibold text-gray-900 mb-4">Contact Address</h4>
+              <div className="space-y-3">
+                <p className="text-gray-900">{customerProfile.contactAddress.street}</p>
+                <p className="text-gray-900">{customerProfile.contactAddress.city}, {customerProfile.contactAddress.province}</p>
+                <p className="text-gray-900">{customerProfile.contactAddress.postalCode}</p>
+              </div>
+            </Card>
+
+            {/* Billing Address - Editable */}
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-semibold text-gray-900">Billing Address</h4>
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={copyBillingToContact}
+                    data-testid="copy-contact-address"
+                  >
+                    Same as Contact
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setEditingBillingAddress(!editingBillingAddress)}
+                    data-testid="edit-billing-address"
+                  >
+                    {editingBillingAddress ? 'Cancel' : 'Edit'}
+                  </Button>
+                </div>
+              </div>
+              
+              {editingBillingAddress ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                    <input 
+                      type="text" 
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      value={customerProfile.billingAddress.street}
+                      onChange={(e) => setCustomerProfile(prev => ({
+                        ...prev,
+                        billingAddress: { ...prev.billingAddress, street: e.target.value }
+                      }))}
+                      data-testid="input-billing-street"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                      <input 
+                        type="text" 
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        value={customerProfile.billingAddress.city}
+                        onChange={(e) => setCustomerProfile(prev => ({
+                          ...prev,
+                          billingAddress: { ...prev.billingAddress, city: e.target.value }
+                        }))}
+                        data-testid="input-billing-city"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Province</label>
+                      <input 
+                        type="text" 
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        value={customerProfile.billingAddress.province}
+                        onChange={(e) => setCustomerProfile(prev => ({
+                          ...prev,
+                          billingAddress: { ...prev.billingAddress, province: e.target.value }
+                        }))}
+                        data-testid="input-billing-province"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                    <input 
+                      type="text" 
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      value={customerProfile.billingAddress.postalCode}
+                      onChange={(e) => setCustomerProfile(prev => ({
+                        ...prev,
+                        billingAddress: { ...prev.billingAddress, postalCode: e.target.value }
+                      }))}
+                      data-testid="input-billing-postal"
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button 
+                      variant="outline"
+                      onClick={() => setEditingBillingAddress(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      className="bg-smart-teal hover:bg-smart-teal/90"
+                      onClick={() => setEditingBillingAddress(false)}
+                      data-testid="save-billing-address"
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-gray-900">{customerProfile.billingAddress.street}</p>
+                  <p className="text-gray-900">{customerProfile.billingAddress.city}, {customerProfile.billingAddress.province}</p>
+                  <p className="text-gray-900">{customerProfile.billingAddress.postalCode}</p>
+                </div>
+              )}
+            </Card>
           </div>
         );
 
@@ -277,44 +477,73 @@ export default function PostpaidAccount() {
           <p className="text-green-200">Manage your postpaid services and account</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Navigation Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="bg-white rounded-2xl p-6 border-0">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Account Services</h2>
-              <div className="space-y-2">
-                {accountSections.map((section) => {
-                  const IconComponent = section.icon;
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => setSelectedSection(section.id)}
-                      className={`w-full text-left p-3 rounded-lg transition-colors flex items-center justify-between ${
-                        selectedSection === section.id 
-                          ? 'bg-smart-teal text-white' 
-                          : 'hover:bg-gray-100 text-gray-700'
-                      }`}
-                      data-testid={`nav-${section.id}`}
-                    >
-                      <div className="flex items-center">
-                        <IconComponent className="w-5 h-5 mr-3" />
-                        <span className="font-medium">{section.title}</span>
-                      </div>
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  );
-                })}
-              </div>
-            </Card>
-          </div>
-
-          {/* Content Area */}
-          <div className="lg:col-span-3">
-            <Card className="bg-white rounded-2xl p-8 border-0">
-              {renderSectionContent()}
-            </Card>
+        {/* Account Services Cards - Horizontal Layout */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6">Account Services</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            {accountSections.map((section) => {
+              const IconComponent = section.icon;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setSelectedSection(section.id)}
+                  className={`p-6 rounded-2xl transition-all duration-300 ${
+                    selectedSection === section.id 
+                      ? 'bg-smart-teal text-white shadow-xl scale-105' 
+                      : 'bg-white text-gray-700 hover:shadow-lg hover:scale-105'
+                  }`}
+                  data-testid={`nav-${section.id}`}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${
+                      selectedSection === section.id 
+                        ? 'bg-white bg-opacity-20' 
+                        : 'bg-smart-teal bg-opacity-10'
+                    }`}>
+                      <IconComponent className={`w-6 h-6 ${
+                        selectedSection === section.id ? 'text-white' : 'text-smart-teal'
+                      }`} />
+                    </div>
+                    <h3 className="font-semibold text-sm mb-1">{section.title}</h3>
+                    <p className={`text-xs opacity-80 ${
+                      selectedSection === section.id ? 'text-white' : 'text-gray-600'
+                    }`}>
+                      {section.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
+
+        {/* Content Area */}
+        {selectedSection && (
+          <Card className="bg-white rounded-2xl p-8 border-0">
+            {renderSectionContent()}
+          </Card>
+        )}
+        
+        {/* Default Content when no section is selected */}
+        {!selectedSection && (
+          <Card className="bg-white rounded-2xl p-8 border-0">
+            <div className="text-center py-12">
+              <User className="w-16 h-16 mx-auto text-smart-teal mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Welcome to My Account</h3>
+              <p className="text-gray-600 mb-6">Select a service above to view and manage your account details</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-2">{accountData.firstName} {accountData.lastName}</h4>
+                  <p className="text-gray-600">{accountData.msisdn}</p>
+                </div>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-2">{accountData.planName}</h4>
+                  <p className="text-gray-600">{accountData.monthlyFee}/month</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
       </main>
     </div>
   );
