@@ -21,48 +21,48 @@ export default function Header() {
           </div>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
             <a 
-              href="#" 
-              className="text-white hover:text-smart-teal transition-colors duration-200 text-sm font-medium"
+              href="/load" 
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-load"
             >
               LOAD
             </a>
             <a 
-              href="#" 
+              href="/promos" 
               className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-promos"
             >
-              PROMOS AND ADD-ONS
+              PROMOS
             </a>
             <a 
-              href="#" 
-              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-sims"
-            >
-              SIMS
-            </a>
-            <a 
-              href="#" 
-              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-              data-testid="nav-phones"
-            >
-              PHONES
-            </a>
-            <a 
-              href="#" 
+              href="/plans" 
               className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-plans"
             >
               PLANS
             </a>
             <a 
-              href="#" 
+              href="/phones" 
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-phones"
+            >
+              PHONES
+            </a>
+            <a 
+              href="/services" 
               className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
               data-testid="nav-services"
             >
               SERVICES
+            </a>
+            <a 
+              href="/account" 
+              className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+              data-testid="nav-account"
+            >
+              MY ACCOUNT
             </a>
           </nav>
 
@@ -112,46 +112,46 @@ export default function Header() {
           <div className="md:hidden py-4 border-t border-white border-opacity-10">
             <nav className="flex flex-col space-y-4">
               <a 
-                href="#" 
-                className="text-white hover:text-smart-teal transition-colors duration-200 text-sm font-medium"
+                href="/load" 
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-load"
               >
                 LOAD
               </a>
               <a 
-                href="#" 
+                href="/promos" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-promos"
               >
-                PROMOS AND ADD-ONS
+                PROMOS
               </a>
               <a 
-                href="#" 
-                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-sims"
-              >
-                SIMS
-              </a>
-              <a 
-                href="#" 
-                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
-                data-testid="mobile-nav-phones"
-              >
-                PHONES
-              </a>
-              <a 
-                href="#" 
+                href="/plans" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-plans"
               >
                 PLANS
               </a>
               <a 
-                href="#" 
+                href="/phones" 
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-phones"
+              >
+                PHONES
+              </a>
+              <a 
+                href="/services" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
                 data-testid="mobile-nav-services"
               >
                 SERVICES
+              </a>
+              <a 
+                href="/account" 
+                className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+                data-testid="mobile-nav-account"
+              >
+                MY ACCOUNT
               </a>
             </nav>
           </div>

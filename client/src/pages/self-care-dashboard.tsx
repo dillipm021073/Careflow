@@ -16,7 +16,6 @@ import {
   TrendingUp
 } from "lucide-react";
 import Header from "@/components/header";
-import CategoryNavigation from "@/components/category-navigation";
 
 interface DashboardStats {
   totalCustomers: number;
@@ -175,8 +174,7 @@ export default function SelfCareDashboard() {
           </Card>
         </section>
 
-        {/* Category Navigation */}
-        <CategoryNavigation />
+
 
         {/* Featured Promos Section */}
         <section className="mb-8">
