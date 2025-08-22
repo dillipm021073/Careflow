@@ -61,7 +61,13 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
-        // CareFlow specific colors
+        // Smart specific colors
+        'smart-bright-green': '#4caf50',
+        'smart-teal': '#00838f',
+        'smart-orange': '#ff6f00',
+        'smart-yellow': '#ffc107',
+        'smart-red': '#d32f2f',
+        'smart-black': '#000000',
         'teal-dark': 'var(--teal-dark)',
         'teal-medium': 'var(--teal-medium)',
         'teal-bright': 'var(--teal-bright)',

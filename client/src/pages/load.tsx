@@ -13,6 +13,8 @@ import {
   DollarSign
 } from "lucide-react";
 import Header from "@/components/header";
+import Footer from "@/components/footer";
+import StarryBackground from "@/components/starry-background";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -86,31 +88,29 @@ export default function LoadPage() {
   };
 
   return (
-    <div 
-      className="min-h-screen text-white"
-      style={{
-        background: `linear-gradient(135deg, hsl(178 70% 25%) 0%, hsl(178 60% 35%) 30%, hsl(120 100% 35%) 70%, hsl(120 100% 45%) 100%)`
-      }}
-    >
-      <Header />
+    <div className="min-h-screen flex flex-col night-sky">
+      <StarryBackground />
+      <div className="relative z-10">
+        <Header />
+      </div>
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Page Header */}
         <section className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-smart-orange bg-opacity-10 rounded-xl flex items-center justify-center">
-              <Zap className="text-smart-orange h-6 w-6" />
+            <div className="w-12 h-12 bg-smart-bright-green bg-opacity-10 rounded-xl flex items-center justify-center">
+              <Zap className="text-smart-bright-green h-6 w-6" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Buy Load</h1>
-              <p className="text-green-200">Top up your Smart prepaid account</p>
+              <p className="text-green-100">Top up your Smart prepaid account</p>
             </div>
           </div>
         </section>
 
         {/* Mobile Number Section */}
-        <Card className="card-gradient rounded-2xl p-6 mb-8 border-0">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Mobile Number</h2>
+        <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
+          <h2 className="text-xl font-semibold text-white mb-4">Mobile Number</h2>
           <div className="flex items-center space-x-4">
             <div className="w-10 h-10 bg-smart-teal bg-opacity-10 rounded-lg flex items-center justify-center">
               <Smartphone className="text-smart-teal h-5 w-5" />
@@ -130,41 +130,43 @@ export default function LoadPage() {
           </div>
         </Card>
 
-        {/* Load Options */}
-        <Card className="card-gradient rounded-2xl p-6 mb-8 border-0">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Select Load Amount</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Load Options - Smart Style */}
+        <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
+          <h2 className="text-xl font-semibold text-white mb-6">Select Load Amount</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {loadOptions.map((option) => (
               <div
                 key={option.id}
                 onClick={() => setSelectedLoad(option)}
-                className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                className={`relative bg-black rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-lg transform hover:-translate-y-1 ${
                   selectedLoad?.id === option.id
-                    ? 'border-smart-teal bg-smart-teal bg-opacity-10'
-                    : 'border-gray-200 hover:border-smart-teal hover:bg-smart-teal hover:bg-opacity-5'
+                    ? 'ring-2 ring-smart-bright-green shadow-lg'
+                    : 'border border-gray-600'
                 }`}
                 data-testid={`load-option-${option.id}`}
               >
                 {option.popular && (
-                  <Badge className="absolute -top-2 -right-2 bg-smart-orange text-white text-xs">
-                    Popular
+                  <Badge className="absolute -top-2 -right-2 bg-yellow-400 text-black font-bold text-xs">
+                    POPULAR
                   </Badge>
                 )}
                 <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <DollarSign className="text-smart-teal h-4 w-4" />
-                    <span className="text-2xl font-bold text-gray-900">₱{option.amount}</span>
+                  <div className="mb-2">
+                    <span className="text-xs text-gray-400 block">only</span>
+                    <span className="text-2xl font-bold text-smart-bright-green">₱{option.amount}</span>
                   </div>
                   {option.bonus && (
-                    <p className="text-sm text-smart-bright-green font-medium mb-1">
+                    <p className="text-sm text-orange-600 font-bold mb-1">
                       + ₱{option.bonus} bonus
                     </p>
                   )}
-                  <p className="text-xs text-gray-600">{option.validity} validity</p>
+                  <p className="text-xs text-white mt-2">{option.validity}</p>
                 </div>
                 {selectedLoad?.id === option.id && (
-                  <div className="absolute top-2 right-2">
-                    <Check className="text-smart-teal h-5 w-5" />
+                  <div className="absolute top-2 left-2">
+                    <div className="w-5 h-5 rounded-full bg-smart-bright-green flex items-center justify-center">
+                      <Check className="text-white h-3 w-3" />
+                    </div>
                   </div>
                 )}
               </div>
@@ -174,8 +176,8 @@ export default function LoadPage() {
 
         {/* Payment Method */}
         {selectedLoad && (
-          <Card className="card-gradient rounded-2xl p-6 mb-8 border-0">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Method</h2>
+          <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
+            <h2 className="text-xl font-semibold text-white mb-6">Payment Method</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {paymentMethods.map((method) => (
                 <div
@@ -183,13 +185,13 @@ export default function LoadPage() {
                   onClick={() => setSelectedPayment(method.id)}
                   className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${
                     selectedPayment === method.id
-                      ? 'border-smart-teal bg-smart-teal bg-opacity-10'
-                      : 'border-gray-200 hover:border-smart-teal hover:bg-smart-teal hover:bg-opacity-5'
+                      ? 'border-smart-bright-green bg-smart-bright-green bg-opacity-20'
+                      : 'border-gray-600 hover:border-smart-bright-green hover:bg-smart-bright-green hover:bg-opacity-10 bg-gray-900'
                   }`}
                   data-testid={`payment-${method.id}`}
                 >
                   <div className="text-2xl mb-2">{method.icon}</div>
-                  <p className="text-sm font-medium text-gray-900">{method.name}</p>
+                  <p className="text-sm font-medium text-white">{method.name}</p>
                   {selectedPayment === method.id && (
                     <div className="mt-2">
                       <Check className="text-smart-teal h-4 w-4 mx-auto" />
@@ -203,36 +205,36 @@ export default function LoadPage() {
 
         {/* Purchase Summary */}
         {selectedLoad && selectedPayment && (
-          <Card className="card-gradient rounded-2xl p-6 mb-8 border-0">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Purchase Summary</h2>
+          <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
+            <h2 className="text-xl font-semibold text-white mb-4">Purchase Summary</h2>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">Mobile Number:</span>
-                <span className="font-mono text-gray-900">{mobileNumber}</span>
+                <span className="text-gray-400">Mobile Number:</span>
+                <span className="font-mono text-white">{mobileNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Load Amount:</span>
-                <span className="font-semibold text-gray-900">₱{selectedLoad.amount}</span>
+                <span className="text-gray-400">Load Amount:</span>
+                <span className="font-semibold text-white">₱{selectedLoad.amount}</span>
               </div>
               {selectedLoad.bonus && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Bonus:</span>
+                  <span className="text-gray-400">Bonus:</span>
                   <span className="font-semibold text-smart-bright-green">₱{selectedLoad.bonus}</span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-gray-600">Validity:</span>
-                <span className="text-gray-900">{selectedLoad.validity}</span>
+                <span className="text-gray-400">Validity:</span>
+                <span className="text-white">{selectedLoad.validity}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Payment Method:</span>
-                <span className="text-gray-900">
+                <span className="text-gray-400">Payment Method:</span>
+                <span className="text-white">
                   {paymentMethods.find(p => p.id === selectedPayment)?.name}
                 </span>
               </div>
               <div className="border-t pt-3 mt-4">
                 <div className="flex justify-between text-lg font-bold">
-                  <span className="text-gray-900">Total Amount:</span>
+                  <span className="text-white">Total Amount:</span>
                   <span className="text-smart-teal">₱{selectedLoad.amount}</span>
                 </div>
               </div>
@@ -240,30 +242,24 @@ export default function LoadPage() {
           </Card>
         )}
 
-        {/* Purchase Button */}
+        {/* Purchase Button - Smart Style */}
         {selectedLoad && selectedPayment && (
           <div className="text-center">
             <Button
               onClick={handlePurchase}
               disabled={purchaseLoadMutation.isPending}
-              className="smart-button px-12 py-3 text-lg font-semibold disabled:opacity-50"
+              className="bg-smart-bright-green hover:bg-green-600 text-white font-bold px-12 py-3 text-lg rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg disabled:opacity-50"
               data-testid="button-purchase-load"
             >
-              {purchaseLoadMutation.isPending ? (
-                "Processing..."
-              ) : (
-                <>
-                  Confirm Purchase
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </>
-              )}
+              {purchaseLoadMutation.isPending ? "Processing..." : "Buy Now"}
             </Button>
-            <p className="text-sm text-green-200 mt-4">
+            <p className="text-sm text-green-100 mt-4">
               Your load will be credited instantly after successful payment
             </p>
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

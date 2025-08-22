@@ -19,6 +19,8 @@ import {
   Settings
 } from "lucide-react";
 import Header from "@/components/header";
+import Footer from "@/components/footer";
+import StarryBackground from "@/components/starry-background";
 
 interface DashboardStats {
   totalCustomers: number;
@@ -89,16 +91,14 @@ export default function SelfCareDashboard() {
   };
 
   return (
-    <div 
-      className="min-h-screen text-white"
-      style={{
-        background: `linear-gradient(135deg, hsl(178 70% 25%) 0%, hsl(178 60% 35%) 30%, hsl(120 100% 35%) 70%, hsl(120 100% 45%) 100%)`
-      }}
-    >
-      <Header />
+    <div className="min-h-screen flex flex-col night-sky">
+      <StarryBackground />
+      <div className="relative z-10">
+        <Header />
+      </div>
       
       {/* Hero Banner Section - matching Smart website style */}
-      <section className="relative overflow-hidden py-12">
+      <section className="relative z-10 overflow-hidden py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative bg-gradient-to-r from-smart-teal via-smart-teal to-smart-bright-green rounded-3xl p-8 md:p-12 overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between relative z-10">
@@ -152,49 +152,37 @@ export default function SelfCareDashboard() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl">
               <Link href="/load" className="group">
                 <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-teal bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-smart-teal" />
-                  </div>
+                  <Zap className="w-8 h-8 text-smart-bright-green mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 text-sm">Load</h3>
                 </div>
               </Link>
               <Link href="/promos" className="group">
                 <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-bright-green bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <Gift className="w-6 h-6 text-smart-bright-green" />
-                  </div>
+                  <Gift className="w-8 h-8 text-smart-bright-green mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 text-sm">Promos</h3>
                 </div>
               </Link>
               <div className="group cursor-pointer">
                 <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-orange bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <Smartphone className="w-6 h-6 text-smart-orange" />
-                  </div>
+                  <Smartphone className="w-8 h-8 text-smart-bright-green mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 text-sm">Phones</h3>
                 </div>
               </div>
               <Link href="/account" className="group">
                 <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-purple-600 bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <CreditCard className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 text-sm">My Account</h3>
+                  <CreditCard className="w-8 h-8 text-smart-bright-green mx-auto mb-3" />
+                  <h3 className="font-semibold text-gray-900 text-sm">Plans</h3>
                 </div>
               </Link>
               <div className="group cursor-pointer">
                 <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-yellow bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <Settings className="w-6 h-6 text-smart-yellow" />
-                  </div>
+                  <Settings className="w-8 h-8 text-smart-bright-green mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 text-sm">Devices</h3>
                 </div>
               </div>
               <div className="group cursor-pointer">
                 <div className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-smart-red bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <MessageSquare className="w-6 h-6 text-smart-red" />
-                  </div>
+                  <MessageSquare className="w-8 h-8 text-smart-bright-green mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 text-sm">SIMs</h3>
                 </div>
               </div>
@@ -203,7 +191,7 @@ export default function SelfCareDashboard() {
         </div>
       </section>
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Welcome Section */}
         <section className="mb-8">
           <div className="flex items-center justify-between">
@@ -211,12 +199,12 @@ export default function SelfCareDashboard() {
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back, {customer?.firstName || 'Valued Customer'}!
               </h1>
-              <p className="text-green-200">
+              <p className="text-green-100">
                 Manage your Smart account and services
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-green-200">Account Status</p>
+              <p className="text-sm text-green-100">Account Status</p>
               <Badge variant="secondary" className="bg-smart-bright-green text-white">
                 {customer?.accountStatus || 'Active'}
               </Badge>
@@ -226,7 +214,7 @@ export default function SelfCareDashboard() {
 
         {/* Account Overview Cards */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="card-gradient rounded-2xl p-6 border-0">
+          <Card className="bg-white rounded-2xl p-6 border-0 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Load Balance</p>
@@ -240,7 +228,7 @@ export default function SelfCareDashboard() {
             </div>
           </Card>
 
-          <Card className="card-gradient rounded-2xl p-6 border-0">
+          <Card className="bg-white rounded-2xl p-6 border-0 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Data Remaining</p>
@@ -254,7 +242,7 @@ export default function SelfCareDashboard() {
             </div>
           </Card>
 
-          <Card className="card-gradient rounded-2xl p-6 border-0">
+          <Card className="bg-white rounded-2xl p-6 border-0 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Plan Validity</p>
@@ -268,7 +256,7 @@ export default function SelfCareDashboard() {
             </div>
           </Card>
 
-          <Card className="card-gradient rounded-2xl p-6 border-0">
+          <Card className="bg-white rounded-2xl p-6 border-0 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Current Plan</p>
@@ -290,7 +278,7 @@ export default function SelfCareDashboard() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-white text-xl font-semibold">Featured Promos</h2>
-              <p className="text-green-200 text-sm">Special offers just for you</p>
+              <p className="text-green-100 text-sm">Special offers just for you</p>
             </div>
             <Button 
               variant="outline" 
@@ -303,39 +291,50 @@ export default function SelfCareDashboard() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {promos?.map((promo) => (
-              <Card key={promo.id} className="card-gradient rounded-2xl p-6 border-0">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-smart-yellow bg-opacity-10 rounded-xl flex items-center justify-center">
-                    <Gift className="text-smart-yellow h-6 w-6" />
+            {promos?.map((promo, index) => {
+              const gradients = [
+                'linear-gradient(135deg, #00c896 0%, #00a572 100%)',
+                'linear-gradient(135deg, #ff9800 0%, #ff6f00 100%)',
+                'linear-gradient(135deg, #e91e63 0%, #c2185b 100%)'
+              ];
+              const gradient = gradients[index % gradients.length];
+              
+              return (
+                <Card key={promo.id} className="rounded-2xl overflow-hidden border-0 shadow-xl" style={{ background: gradient }}>
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <Gift className="text-white h-6 w-6" />
+                      </div>
+                      <Badge className="bg-white bg-opacity-30 text-white font-bold border-0">
+                        {promo.type}
+                      </Badge>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2" data-testid={`promo-name-${promo.id}`}>
+                      {promo.name}
+                    </h3>
+                    <p className="text-white text-sm mb-4 opacity-90" data-testid={`promo-desc-${promo.id}`}>
+                      {promo.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-3xl font-bold text-white">₱{promo.price}</span>
+                      <Button 
+                        size="sm" 
+                        className="bg-white text-black hover:bg-gray-100 font-bold"
+                        data-testid={`button-subscribe-${promo.id}`}
+                      >
+                        Buy Now
+                      </Button>
+                    </div>
+                    {promo.keyword && (
+                      <p className="text-xs text-white opacity-80 mt-2">
+                        Text <strong>{promo.keyword}</strong> to 8080
+                      </p>
+                    )}
                   </div>
-                  <Badge variant="secondary" className="bg-smart-bright-green text-white">
-                    {promo.type}
-                  </Badge>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2" data-testid={`promo-name-${promo.id}`}>
-                  {promo.name}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4" data-testid={`promo-desc-${promo.id}`}>
-                  {promo.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-smart-teal">₱{promo.price}</span>
-                  <Button 
-                    size="sm" 
-                    className="bg-smart-teal hover:bg-smart-dark-teal text-white"
-                    data-testid={`button-subscribe-${promo.id}`}
-                  >
-                    Subscribe
-                  </Button>
-                </div>
-                {promo.keyword && (
-                  <p className="text-xs text-gray-500 mt-2">
-                    Text <strong>{promo.keyword}</strong> to 8080
-                  </p>
-                )}
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
         </section>
 
@@ -379,7 +378,7 @@ export default function SelfCareDashboard() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-white text-xl font-semibold">Notifications</h2>
-              <p className="text-green-200 text-sm">Stay updated on your account</p>
+              <p className="text-green-100 text-sm">Stay updated on your account</p>
             </div>
             <Button 
               variant="outline" 
@@ -418,6 +417,7 @@ export default function SelfCareDashboard() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

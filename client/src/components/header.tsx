@@ -12,16 +12,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Smart Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex items-center space-x-2">
-                {/* Smart Triangle Logo */}
-                <div className="w-6 h-6 relative">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-smart-bright-green">
-                    <path d="M12 2L2 22h20L12 2z" />
-                  </svg>
-                </div>
-                <span className="text-2xl font-bold text-white">Smart</span>
-              </div>
+            <Link href="/" className="flex items-center">
+              <img 
+                src="/images/smart-logo.jpg" 
+                alt="Smart" 
+                className="h-10 w-auto"
+              />
             </Link>
           </div>
 
@@ -42,7 +38,9 @@ export default function Header() {
               PROMOS & ADD-ONS
             </Link>
             <a 
-              href="#" 
+              href="https://store.smart.com.ph/sims/all-sims" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-white hover:text-smart-bright-green transition-colors duration-200 text-sm font-medium uppercase tracking-wide"
             >
               SIMS
