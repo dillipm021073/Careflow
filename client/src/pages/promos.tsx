@@ -125,12 +125,15 @@ const allPromos = [
   }
 ];
 
+import { GridSkeleton } from "@/components/ui/grid-skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
+
 export default function PromosPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
-  const { data: customer } = useQuery({
+  const { data: customer, isLoading: isCustomerLoading } = useQuery({
     queryKey: ['/api/customers/customer-1'],
   });
 
@@ -217,7 +220,9 @@ export default function PromosPage() {
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <label htmlFor="search-promos" className="sr-only">Search Promos</label>
                   <Input
+                    id="search-promos"
                     placeholder="Search promos..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -253,90 +258,92 @@ export default function PromosPage() {
         </div>
 
         {/* Promos Grid - Smart Style */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filteredPromos.map((promo) => (
-            <div key={promo.id} className="bg-black rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-700 flex flex-col">
-              {/* Promo Image Area */}
-              <div className="relative bg-gradient-to-br from-smart-teal to-smart-dark-teal p-6">
-                <div className="absolute top-2 right-2">
-                  {promo.category === "featured" && (
-                    <Badge className="bg-yellow-400 text-black font-bold">
-                      FEATURED
-                    </Badge>
-                  )}
-                </div>
-                <div className="text-center">
-                  <Gift className="mx-auto h-12 w-12 text-white mb-2" />
-                  <h3 className="text-white font-bold text-lg">{promo.name}</h3>
-                </div>
-              </div>
-              
-              {/* Promo Details */}
-              <div className="p-4 flex flex-col h-full">
-                <p className="text-white text-sm mb-3 flex-grow" data-testid={`promo-desc-${promo.id}`}>
-                  {promo.description}
-                </p>
-                
-                {/* Price Display */}
-                <div className="text-center mb-3">
-                  <span className="text-sm text-gray-400">only</span>
-                  <div className="text-2xl font-bold text-smart-bright-green">₱{promo.price}</div>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-1 mb-4 text-xs flex-grow">
-                  {promo.dataAmount && (
-                    <div className="flex items-center space-x-1">
-                      <Database className="text-smart-teal h-3 w-3" />
-                      <span className="text-white">{formatDataAmount(promo.dataAmount)} data</span>
-                    </div>
-                  )}
-                  {promo.voiceMinutes === 0 && (
-                    <div className="flex items-center space-x-1">
-                      <Phone className="text-smart-bright-green h-3 w-3" />
-                      <span className="text-white">Unlimited calls</span>
-                    </div>
-                  )}
-                  {promo.smsCount === 0 && (
-                    <div className="flex items-center space-x-1">
-                      <MessageSquare className="text-purple-600 h-3 w-3" />
-                      <span className="text-white">Unlimited texts</span>
-                    </div>
-                  )}
-                  {promo.validityHours && (
-                    <div className="flex items-center space-x-1">
-                      <Clock className="text-smart-orange h-3 w-3" />
-                      <span className="text-white">Valid for {formatValidity(promo.validityHours)}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Buy Now Button */}
-                <Button
-                  onClick={() => handleSubscribe(promo)}
-                  disabled={subscribePromoMutation.isPending}
-                  className="w-full bg-smart-teal hover:bg-smart-teal/90 text-white font-bold py-2 px-4 rounded transition-all duration-300 disabled:opacity-50"
-                  data-testid={`button-subscribe-${promo.id}`}
-                >
-                  {subscribePromoMutation.isPending ? "Processing..." : "Buy Now"}
-                </Button>
-                
-                {promo.keyword && (
-                  <div className="text-center mt-2">
-                    <p className="text-xs text-gray-400">Text <strong className="text-white">{promo.keyword}</strong> to 8080</p>
+        {isCustomerLoading ? (
+          <GridSkeleton />
+        ) : filteredPromos.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {filteredPromos.map((promo) => (
+              <div key={promo.id} className="bg-black rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-700 flex flex-col">
+                {/* Promo Image Area */}
+                <div className="relative bg-gradient-to-br from-smart-teal to-smart-dark-teal p-6">
+                  <div className="absolute top-2 right-2">
+                    {promo.category === "featured" && (
+                      <Badge className="bg-yellow-400 text-black font-bold">
+                        FEATURED
+                      </Badge>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+                  <div className="text-center">
+                    <Gift className="mx-auto h-12 w-12 text-white mb-2" />
+                    <h3 className="text-white font-bold text-lg">{promo.name}</h3>
+                  </div>
+                </div>
+                
+                {/* Promo Details */}
+                <div className="p-4 flex flex-col h-full">
+                  <p className="text-white text-sm mb-3 flex-grow" data-testid={`promo-desc-${promo.id}`}>
+                    {promo.description}
+                  </p>
+                  
+                  {/* Price Display */}
+                  <div className="text-center mb-3">
+                    <span className="text-sm text-gray-400">only</span>
+                    <div className="text-2xl font-bold text-smart-bright-green">₱{promo.price}</div>
+                  </div>
 
-        {filteredPromos.length === 0 && (
-          <div className="text-center py-12">
-            <Gift className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">No promos found</h3>
-            <p className="text-green-100">Try adjusting your search or filter criteria</p>
+                  {/* Features */}
+                  <div className="space-y-1 mb-4 text-xs flex-grow">
+                    {promo.dataAmount && (
+                      <div className="flex items-center space-x-1">
+                        <Database className="text-smart-teal h-3 w-3" />
+                        <span className="text-white">{formatDataAmount(promo.dataAmount)} data</span>
+                      </div>
+                    )}
+                    {promo.voiceMinutes === 0 && (
+                      <div className="flex items-center space-x-1">
+                        <Phone className="text-smart-bright-green h-3 w-3" />
+                        <span className="text-white">Unlimited calls</span>
+                      </div>
+                    )}
+                    {promo.smsCount === 0 && (
+                      <div className="flex items-center space-x-1">
+                        <MessageSquare className="text-purple-600 h-3 w-3" />
+                        <span className="text-white">Unlimited texts</span>
+                      </div>
+                    )}
+                    {promo.validityHours && (
+                      <div className="flex items-center space-x-1">
+                        <Clock className="text-smart-orange h-3 w-3" />
+                        <span className="text-white">Valid for {formatValidity(promo.validityHours)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Buy Now Button */}
+                  <Button
+                    onClick={() => handleSubscribe(promo)}
+                    disabled={subscribePromoMutation.isPending}
+                    className="w-full bg-smart-teal hover:bg-smart-teal/90 text-white font-bold py-2 px-4 rounded transition-all duration-300 disabled:opacity-50"
+                    data-testid={`button-subscribe-${promo.id}`}
+                  >
+                    {subscribePromoMutation.isPending ? "Processing..." : "Buy Now"}
+                  </Button>
+                  
+                  {promo.keyword && (
+                    <div className="text-center mt-2">
+                      <p className="text-xs text-gray-400">Text <strong className="text-white">{promo.keyword}</strong> to 8080</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+        ) : (
+          <EmptyState
+            icon={<Gift className="mx-auto h-12 w-12 text-gray-400 mb-4" />}
+            title="No promos found"
+            description="Try adjusting your search or filter criteria"
+          />
         )}
       </main>
       <Footer />

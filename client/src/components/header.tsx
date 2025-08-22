@@ -66,22 +66,26 @@ export default function Header() {
           </nav>
 
           {/* Right Side Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-4" aria-label="User actions">
             <Button 
               variant="ghost" 
               size="sm" 
               className="text-white hover:text-smart-bright-green"
               data-testid="button-search"
+              aria-label="Search"
             >
               <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
               className="text-white hover:text-smart-bright-green"
               data-testid="button-profile"
+              aria-label="User Profile"
             >
               <User className="h-5 w-5" />
+              <span className="sr-only">User Profile</span>
             </Button>
             <div className="text-white text-sm">
               <span className="text-gray-300">Shop Postpaid</span>
@@ -95,7 +99,7 @@ export default function Header() {
             >
               Track my Order
             </Link>
-          </div>
+          </nav>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
@@ -105,16 +109,19 @@ export default function Header() {
               className="text-white hover:text-smart-bright-green"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="button-mobile-menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               <Menu className="h-5 w-5" />
+              <span className="sr-only">Open menu</span>
             </Button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-white border-opacity-10">
-            <nav className="flex flex-col space-y-4">
+          <div id="mobile-menu" className="md:hidden py-4 border-t border-white border-opacity-10">
+            <nav className="flex flex-col space-y-4" aria-label="Mobile navigation">
               <Link 
                 href="/load" 
                 className="text-green-200 hover:text-white transition-colors duration-200 text-sm font-medium"

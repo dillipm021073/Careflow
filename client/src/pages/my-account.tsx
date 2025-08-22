@@ -17,7 +17,16 @@ import {
   Calendar,
   Download,
   ShoppingCart,
-  Clock
+  Clock,
+  Bell,
+  HelpCircle,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  History,
+  Settings,
+  MapPin,
+  Headphones
 } from "lucide-react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -105,6 +114,27 @@ interface Order {
   estimatedDelivery?: string;
 }
 
+interface Notification {
+  id: string;
+  date: string;
+  title: string;
+  message: string;
+  type: "tax_exemption" | "billing" | "service" | "promo" | "system";
+  status: "read" | "unread";
+  actionRequired?: boolean;
+}
+
+interface ServiceRequest {
+  id: string;
+  requestNumber: string;
+  date: string;
+  type: "problem_report" | "billing_address" | "self_care" | "service_change" | "technical";
+  description: string;
+  status: "open" | "in_progress" | "closed" | "resolved";
+  priority?: "low" | "medium" | "high";
+  resolution?: string;
+}
+
 export default function PostpaidAccount() {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [editingBillingAddress, setEditingBillingAddress] = useState(false);
@@ -173,14 +203,14 @@ export default function PostpaidAccount() {
     }
   });
 
-  // Mock bill data for last 6 months - including unpaid bills
+  // Mock bill data for last 6 months - matching PDF amount ₱2750.89
   const billHistory: Bill[] = [
-    { id: "bill-1", billDate: "Jan 15, 2025", dueDate: "Feb 5, 2025", amount: "₱1,499.00", status: "Unpaid", period: "Jan 2025" },
-    { id: "bill-2", billDate: "Dec 15, 2024", dueDate: "Jan 5, 2025", amount: "₱1,499.00", status: "Paid", period: "Dec 2024" },
-    { id: "bill-3", billDate: "Nov 15, 2024", dueDate: "Dec 5, 2024", amount: "₱1,499.00", status: "Paid", period: "Nov 2024" },
-    { id: "bill-4", billDate: "Oct 15, 2024", dueDate: "Nov 5, 2024", amount: "₱1,499.00", status: "Paid", period: "Oct 2024" },
-    { id: "bill-5", billDate: "Sep 15, 2024", dueDate: "Oct 5, 2024", amount: "₱1,499.00", status: "Paid", period: "Sep 2024" },
-    { id: "bill-6", billDate: "Aug 15, 2024", dueDate: "Sep 5, 2024", amount: "₱1,499.00", status: "Unpaid", period: "Aug 2024" }
+    { id: "bill-1", billDate: "Jan 15, 2025", dueDate: "Feb 5, 2025", amount: "₱2,750.89", status: "Unpaid", period: "Jan 2025" },
+    { id: "bill-2", billDate: "Dec 15, 2024", dueDate: "Jan 5, 2025", amount: "₱2,750.89", status: "Paid", period: "Dec 2024" },
+    { id: "bill-3", billDate: "Nov 15, 2024", dueDate: "Dec 5, 2024", amount: "₱2,750.89", status: "Paid", period: "Nov 2024" },
+    { id: "bill-4", billDate: "Oct 15, 2024", dueDate: "Nov 5, 2024", amount: "₱2,750.89", status: "Paid", period: "Oct 2024" },
+    { id: "bill-5", billDate: "Sep 15, 2024", dueDate: "Oct 5, 2024", amount: "₱2,750.89", status: "Paid", period: "Sep 2024" },
+    { id: "bill-6", billDate: "Aug 15, 2024", dueDate: "Sep 5, 2024", amount: "₱2,750.89", status: "Paid", period: "Aug 2024" }
   ];
 
   // Mock usage data
@@ -190,13 +220,112 @@ export default function PostpaidAccount() {
     { type: "SMS", used: "120", total: "Unlimited", percentage: 12 }
   ];
 
-  // Mock payment history - last 5 payments
+  // Mock payment history - last 5 payments (matching PDF amount)
   const paymentHistory: Payment[] = [
-    { id: "pay-1", date: "Jan 5, 2025", amount: "₱1,499.00", method: "GCash", status: "Successful", refNumber: "REF20250105001", description: "Monthly Bill Payment - Jan 2025" },
-    { id: "pay-2", date: "Dec 5, 2024", amount: "₱1,499.00", method: "Credit Card", status: "Successful", refNumber: "REF20241205001", description: "Monthly Bill Payment - Dec 2024" },
-    { id: "pay-3", date: "Nov 5, 2024", amount: "₱1,499.00", method: "PayMaya", status: "Successful", refNumber: "REF20241105001", description: "Monthly Bill Payment - Nov 2024" },
-    { id: "pay-4", date: "Oct 5, 2024", amount: "₱1,499.00", method: "Bank Transfer", status: "Successful", refNumber: "REF20241005001", description: "Monthly Bill Payment - Oct 2024" },
-    { id: "pay-5", date: "Sep 5, 2024", amount: "₱1,499.00", method: "GCash", status: "Successful", refNumber: "REF20240905001", description: "Monthly Bill Payment - Sep 2024" }
+    { id: "pay-1", date: "Jan 5, 2025", amount: "₱2,750.89", method: "GCash", status: "Successful", refNumber: "REF20250105001", description: "Monthly Bill Payment - Jan 2025" },
+    { id: "pay-2", date: "Dec 5, 2024", amount: "₱2,750.89", method: "Credit Card", status: "Successful", refNumber: "REF20241205001", description: "Monthly Bill Payment - Dec 2024" },
+    { id: "pay-3", date: "Nov 5, 2024", amount: "₱2,750.89", method: "PayMaya", status: "Successful", refNumber: "REF20241105001", description: "Monthly Bill Payment - Nov 2024" },
+    { id: "pay-4", date: "Oct 5, 2024", amount: "₱2,750.89", method: "Bank Transfer", status: "Successful", refNumber: "REF20241005001", description: "Monthly Bill Payment - Oct 2024" },
+    { id: "pay-5", date: "Sep 5, 2024", amount: "₱2,750.89", method: "GCash", status: "Successful", refNumber: "REF20240905001", description: "Monthly Bill Payment - Sep 2024" }
+  ];
+
+  // Mock notifications data - matching PDF content
+  const notificationsData: Notification[] = [
+    {
+      id: "notif-1",
+      date: "Jan 20, 2025",
+      title: "Tax Exemption Approved",
+      message: "Your request for tax exemption on your COVID-19 subscription has been approved.",
+      type: "tax_exemption",
+      status: "unread",
+      actionRequired: false
+    },
+    {
+      id: "notif-2", 
+      date: "Jan 18, 2025",
+      title: "Bill Payment Received",
+      message: "We have received your payment of ₱2,750.89 for your January 2025 bill. Thank you!",
+      type: "billing",
+      status: "read"
+    },
+    {
+      id: "notif-3",
+      date: "Jan 15, 2025",
+      title: "New Bill Available",
+      message: "Your January 2025 bill of ₱2,750.89 is now available. Due date: February 5, 2025.",
+      type: "billing",
+      status: "read",
+      actionRequired: true
+    },
+    {
+      id: "notif-4",
+      date: "Jan 10, 2025",
+      title: "Service Upgrade Complete",
+      message: "Your plan upgrade to Smart Postpaid Plan 1499 has been successfully activated.",
+      type: "service",
+      status: "read"
+    },
+    {
+      id: "notif-5",
+      date: "Jan 5, 2025",
+      title: "New Promo Available",
+      message: "Exclusive offer! Get 50% off on your next device upgrade. Valid until Jan 31, 2025.",
+      type: "promo",
+      status: "read"
+    }
+  ];
+
+  // Mock service requests data - matching PDF content
+  const serviceRequestsData: ServiceRequest[] = [
+    {
+      id: "req-1",
+      requestNumber: "SR20250120001",
+      date: "Jan 20, 2025",
+      type: "problem_report",
+      description: "Slow internet connection in Makati area",
+      status: "in_progress",
+      priority: "high"
+    },
+    {
+      id: "req-2",
+      requestNumber: "SR20250118002",
+      date: "Jan 18, 2025",
+      type: "billing_address",
+      description: "Change billing address to new office location",
+      status: "closed",
+      priority: "medium",
+      resolution: "Address successfully updated"
+    },
+    {
+      id: "req-3",
+      requestNumber: "SR20250115003",
+      date: "Jan 15, 2025",
+      type: "self_care",
+      description: "Request for postpaid self-care activation",
+      status: "resolved",
+      priority: "low",
+      resolution: "Self-care access granted"
+    },
+    {
+      id: "req-4",
+      requestNumber: "SR20250110004",
+      date: "Jan 10, 2025",
+      type: "service_change",
+      description: "Add international roaming to account",
+      status: "closed",
+      priority: "medium",
+      resolution: "International roaming activated"
+    },
+    {
+      id: "req-5",
+      requestNumber: "SR20250105005",
+      date: "Jan 5, 2025",
+      type: "technical",
+      description: "Unable to receive SMS messages",
+      status: "resolved",
+      priority: "high",
+      resolution: "SMS service restored"
+    }
   ];
 
   // Mock orders data
@@ -240,7 +369,9 @@ export default function PostpaidAccount() {
     { id: "bills", title: "My Bills", icon: FileText, description: "Billing history and statements" },
     { id: "usage", title: "My Usages", icon: BarChart3, description: "Data, voice, and SMS usage" },
     { id: "payments", title: "My Payments", icon: CreditCard, description: "Payment methods and history" },
-    { id: "loyalty", title: "My Loyalty Points", icon: Gift, description: "Rewards and loyalty program" }
+    { id: "loyalty", title: "My Loyalty Points", icon: Gift, description: "Rewards and loyalty program" },
+    { id: "notifications", title: "Notifications", icon: Bell, description: "Alerts and updates" },
+    { id: "requests", title: "My Requests", icon: HelpCircle, description: "Service requests and support" }
   ];
 
   const copyBillingToContact = () => {
@@ -1134,6 +1265,296 @@ export default function PostpaidAccount() {
           </div>
         );
 
+      case "notifications":
+        const unreadNotifications = notificationsData.filter(n => n.status === "unread");
+        const readNotifications = notificationsData.filter(n => n.status === "read");
+
+        const getNotificationIcon = (type: string) => {
+          switch(type) {
+            case "tax_exemption": return CheckCircle;
+            case "billing": return CreditCard;
+            case "service": return Settings;
+            case "promo": return Gift;
+            case "system": return AlertCircle;
+            default: return Bell;
+          }
+        };
+
+        const getNotificationColor = (type: string) => {
+          switch(type) {
+            case "tax_exemption": return "text-green-500";
+            case "billing": return "text-blue-500";
+            case "service": return "text-purple-500";
+            case "promo": return "text-yellow-500";
+            case "system": return "text-red-500";
+            default: return "text-gray-500";
+          }
+        };
+
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">Notifications</h3>
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="bg-red-100 text-red-800">
+                  {unreadNotifications.length} Unread
+                </Badge>
+                <Button variant="outline" size="sm" className="bg-black text-white border-gray-600 hover:bg-smart-teal hover:text-black hover:border-smart-teal transition-all duration-300">
+                  Mark All Read
+                </Button>
+              </div>
+            </div>
+
+            {/* Tax Exemption Approval - Featured */}
+            {unreadNotifications.filter(n => n.type === "tax_exemption").length > 0 && (
+              <div className="p-6 bg-green-900 bg-opacity-20 rounded-xl border border-green-600">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-semibold text-white mb-2">Tax Exemption Approved</h4>
+                    <p className="text-gray-300 mb-2">Your request for tax exemption on your COVID-19 subscription has been approved.</p>
+                    <p className="text-xs text-gray-400">January 20, 2025</p>
+                  </div>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    APPROVED
+                  </Badge>
+                </div>
+              </div>
+            )}
+
+            {/* Unread Notifications */}
+            {unreadNotifications.filter(n => n.type !== "tax_exemption").length > 0 && (
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-smart-bright-green">New Notifications</h4>
+                {unreadNotifications.filter(n => n.type !== "tax_exemption").map((notification) => {
+                  const IconComponent = getNotificationIcon(notification.type);
+                  return (
+                    <div key={notification.id} className="p-4 bg-white rounded-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border-2 border-smart-bright-green">
+                      <div className="flex items-start space-x-4">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getNotificationColor(notification.type)}`}>
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h5 className="font-semibold text-black">{notification.title}</h5>
+                              <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                              <p className="text-xs text-gray-400 mt-2">{notification.date}</p>
+                            </div>
+                            {notification.actionRequired && (
+                              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
+                                Action Required
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Read Notifications */}
+            {readNotifications.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-white">Previous Notifications</h4>
+                {readNotifications.map((notification) => {
+                  const IconComponent = getNotificationIcon(notification.type);
+                  return (
+                    <div key={notification.id} className="p-4 bg-white rounded-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-200 opacity-75">
+                      <div className="flex items-start space-x-4">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getNotificationColor(notification.type)} opacity-60`}>
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h5 className="font-semibold text-black">{notification.title}</h5>
+                              <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                              <p className="text-xs text-gray-400 mt-2">{notification.date}</p>
+                            </div>
+                            {notification.actionRequired && (
+                              <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
+                                Completed
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+
+      case "requests":
+        const openRequests = serviceRequestsData.filter(r => r.status === "open" || r.status === "in_progress");
+        const closedRequests = serviceRequestsData.filter(r => r.status === "closed" || r.status === "resolved");
+
+        const getRequestIcon = (type: string) => {
+          switch(type) {
+            case "problem_report": return AlertCircle;
+            case "billing_address": return MapPin;
+            case "self_care": return Settings;
+            case "service_change": return Smartphone;
+            case "technical": return Headphones;
+            default: return HelpCircle;
+          }
+        };
+
+        const getStatusColor = (status: string) => {
+          switch(status) {
+            case "open": return "bg-blue-100 text-blue-800";
+            case "in_progress": return "bg-yellow-100 text-yellow-800";
+            case "closed": return "bg-gray-100 text-gray-800";
+            case "resolved": return "bg-green-100 text-green-800";
+            default: return "bg-gray-100 text-gray-800";
+          }
+        };
+
+        const getPriorityColor = (priority?: string) => {
+          switch(priority) {
+            case "high": return "text-red-500";
+            case "medium": return "text-yellow-500";
+            case "low": return "text-green-500";
+            default: return "text-gray-500";
+          }
+        };
+
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">My Requests</h3>
+              <Button className="bg-smart-teal hover:bg-smart-teal/90 text-white">
+                <HelpCircle className="w-4 h-4 mr-2" />
+                New Request
+              </Button>
+            </div>
+
+            {/* Request Categories */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <button className="p-4 bg-white rounded-xl hover:shadow-xl transition-all text-center group">
+                <AlertCircle className="w-6 h-6 text-smart-bright-green mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                <p className="text-xs font-semibold text-black">Report a Problem</p>
+              </button>
+              <button className="p-4 bg-white rounded-xl hover:shadow-xl transition-all text-center group">
+                <MapPin className="w-6 h-6 text-smart-bright-green mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                <p className="text-xs font-semibold text-black">Change Billing Address</p>
+              </button>
+              <button className="p-4 bg-white rounded-xl hover:shadow-xl transition-all text-center group">
+                <Settings className="w-6 h-6 text-smart-bright-green mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                <p className="text-xs font-semibold text-black">Postpaid Self-Care</p>
+              </button>
+              <button className="p-4 bg-white rounded-xl hover:shadow-xl transition-all text-center group">
+                <Smartphone className="w-6 h-6 text-smart-bright-green mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                <p className="text-xs font-semibold text-black">Service Changes</p>
+              </button>
+              <button className="p-4 bg-white rounded-xl hover:shadow-xl transition-all text-center group">
+                <Headphones className="w-6 h-6 text-smart-bright-green mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                <p className="text-xs font-semibold text-black">Technical Support</p>
+              </button>
+            </div>
+
+            {/* Active Requests */}
+            {openRequests.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-smart-bright-green">Active Requests</h4>
+                {openRequests.map((request) => {
+                  const IconComponent = getRequestIcon(request.type);
+                  return (
+                    <div key={request.id} className="p-6 bg-white rounded-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-smart-bright-green">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center">
+                            <IconComponent className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-black">Request #{request.requestNumber}</h4>
+                            <p className="text-sm text-gray-600">{request.date}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {request.priority && (
+                            <Badge variant="outline" className={`${getPriorityColor(request.priority)} border-current`}>
+                              {request.priority.toUpperCase()}
+                            </Badge>
+                          )}
+                          <Badge variant="secondary" className={getStatusColor(request.status)}>
+                            {request.status.replace('_', ' ').toUpperCase()}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-black">{request.description}</p>
+                        {request.status === "in_progress" && (
+                          <div className="flex items-center space-x-2 mt-4">
+                            <div className="flex-1 bg-gray-200 rounded-full h-2">
+                              <div className="bg-smart-bright-green h-2 rounded-full" style={{ width: '60%' }}></div>
+                            </div>
+                            <span className="text-xs text-gray-600">In Progress</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Closed Requests */}
+            {closedRequests.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-white">Completed Requests</h4>
+                {closedRequests.slice(0, 3).map((request) => {
+                  const IconComponent = getRequestIcon(request.type);
+                  return (
+                    <div key={request.id} className="p-6 bg-white rounded-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-200">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                            <IconComponent className="w-6 h-6 text-gray-400" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-black">Request #{request.requestNumber}</h4>
+                            <p className="text-sm text-gray-600">{request.date}</p>
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className={getStatusColor(request.status)}>
+                          {request.status.replace('_', ' ').toUpperCase()}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-black">{request.description}</p>
+                        {request.resolution && (
+                          <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                            <p className="text-sm text-green-800">
+                              <CheckCircle className="w-4 h-4 inline mr-2" />
+                              {request.resolution}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* View All Button */}
+            <div className="text-center">
+              <Button variant="outline" className="bg-black text-white border-gray-600 hover:bg-smart-teal hover:text-black hover:border-smart-teal transition-all duration-300">
+                View All Requests
+                <ChevronRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        );
+
       default:
         return (
           <div className="space-y-6">
@@ -1180,7 +1601,7 @@ export default function PostpaidAccount() {
         {/* Account Services Cards - Horizontal Layout */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-white mb-6">Account Services</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-4">
             {accountSections.map((section) => {
               const IconComponent = section.icon;
               return (

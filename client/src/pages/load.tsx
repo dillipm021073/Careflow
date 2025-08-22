@@ -44,13 +44,16 @@ const paymentMethods = [
   { id: "bank_transfer", name: "Bank Transfer", icon: "🏦" }
 ];
 
+import { CardSkeleton } from "@/components/ui/card-skeleton";
+import { GridSkeleton } from "@/components/ui/grid-skeleton";
+
 export default function LoadPage() {
   const [selectedLoad, setSelectedLoad] = useState<LoadOption | null>(null);
   const [selectedPayment, setSelectedPayment] = useState<string>("");
   const [mobileNumber, setMobileNumber] = useState("09171234567");
   const { toast } = useToast();
 
-  const { data: customer } = useQuery({
+  const { data: customer, isLoading: isCustomerLoading } = useQuery({
     queryKey: ['/api/customers/customer-1'],
   });
 
@@ -109,70 +112,80 @@ export default function LoadPage() {
         </section>
 
         {/* Mobile Number Section */}
-        <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
-          <h2 className="text-xl font-semibold text-white mb-4">Mobile Number</h2>
-          <div className="flex items-center space-x-4">
-            <div className="w-10 h-10 bg-smart-teal bg-opacity-10 rounded-lg flex items-center justify-center">
-              <Smartphone className="text-smart-teal h-5 w-5" />
+        {isCustomerLoading ? (
+          <CardSkeleton />
+        ) : (
+          <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
+            <h2 className="text-xl font-semibold text-white mb-4">Mobile Number</h2>
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-smart-teal bg-opacity-10 rounded-lg flex items-center justify-center">
+                <Smartphone className="text-smart-teal h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <label htmlFor="mobile-number" className="sr-only">Mobile Number</label>
+                <Input
+                  id="mobile-number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  placeholder="Enter mobile number"
+                  className="text-lg font-mono"
+                  data-testid="input-mobile-number"
+                />
+              </div>
+              <Badge variant="secondary" className="bg-smart-bright-green text-white">
+                Smart Prepaid
+              </Badge>
             </div>
-            <div className="flex-1">
-              <Input
-                value={mobileNumber}
-                onChange={(e) => setMobileNumber(e.target.value)}
-                placeholder="Enter mobile number"
-                className="text-lg font-mono"
-                data-testid="input-mobile-number"
-              />
-            </div>
-            <Badge variant="secondary" className="bg-smart-bright-green text-white">
-              Smart Prepaid
-            </Badge>
-          </div>
-        </Card>
+          </Card>
+        )}
 
         {/* Load Options - Smart Style */}
-        <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
-          <h2 className="text-xl font-semibold text-white mb-6">Select Load Amount</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {loadOptions.map((option) => (
-              <div
-                key={option.id}
-                onClick={() => setSelectedLoad(option)}
-                className={`relative bg-black rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-lg transform hover:-translate-y-1 ${
-                  selectedLoad?.id === option.id
-                    ? 'ring-2 ring-smart-bright-green shadow-lg'
-                    : 'border border-gray-600'
-                }`}
-                data-testid={`load-option-${option.id}`}
-              >
-                {option.popular && (
-                  <Badge className="absolute -top-2 -right-2 bg-yellow-400 text-black font-bold text-xs">
-                    POPULAR
-                  </Badge>
-                )}
-                <div className="text-center">
-                  <div className="mb-2">
-                    <span className="text-xs text-gray-400 block">only</span>
-                    <span className="text-2xl font-bold text-smart-bright-green">₱{option.amount}</span>
-                  </div>
-                  {option.bonus && (
-                    <p className="text-sm text-orange-600 font-bold mb-1">
-                      + ₱{option.bonus} bonus
-                    </p>
+        {isCustomerLoading ? (
+          <GridSkeleton />
+        ) : (
+          <Card className="bg-black rounded-xl p-6 mb-8 border border-gray-700">
+            <h2 className="text-xl font-semibold text-white mb-6">Select Load Amount</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {loadOptions.map((option) => (
+                <div
+                  key={option.id}
+                  onClick={() => setSelectedLoad(option)}
+                  className={`relative bg-black rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-lg transform hover:-translate-y-1 ${
+                    selectedLoad?.id === option.id
+                      ? 'ring-2 ring-smart-bright-green shadow-lg'
+                      : 'border border-gray-600'
+                  }`}
+                  data-testid={`load-option-${option.id}`}
+                >
+                  {option.popular && (
+                    <Badge className="absolute -top-2 -right-2 bg-yellow-400 text-black font-bold text-xs">
+                      POPULAR
+                    </Badge>
                   )}
-                  <p className="text-xs text-white mt-2">{option.validity}</p>
-                </div>
-                {selectedLoad?.id === option.id && (
-                  <div className="absolute top-2 left-2">
-                    <div className="w-5 h-5 rounded-full bg-smart-bright-green flex items-center justify-center">
-                      <Check className="text-white h-3 w-3" />
+                  <div className="text-center">
+                    <div className="mb-2">
+                      <span className="text-xs text-gray-400 block">only</span>
+                      <span className="text-2xl font-bold text-smart-bright-green">₱{option.amount}</span>
                     </div>
+                    {option.bonus && (
+                      <p className="text-sm text-orange-600 font-bold mb-1">
+                        + ₱{option.bonus} bonus
+                      </p>
+                    )}
+                    <p className="text-xs text-white mt-2">{option.validity}</p>
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </Card>
+                  {selectedLoad?.id === option.id && (
+                    <div className="absolute top-2 left-2">
+                      <div className="w-5 h-5 rounded-full bg-smart-bright-green flex items-center justify-center">
+                        <Check className="text-white h-3 w-3" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
 
         {/* Payment Method */}
         {selectedLoad && (

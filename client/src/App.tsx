@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import SelfCareDashboard from "@/pages/self-care-dashboard";
 import LoadPage from "@/pages/load";
 import PromosPage from "@/pages/promos";
-import PostpaidAccountPage from "@/pages/account";
+import PostpaidAccountPage from "@/pages/my-account";
 import NotFound from "@/pages/not-found";
 
 function Router() {
